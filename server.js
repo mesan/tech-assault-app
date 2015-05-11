@@ -1,6 +1,10 @@
 import Hapi from 'hapi';
 import fs from 'fs';
 
+let {
+    TECH_APP_LOGIN_FACEBOOK_URL
+} = process.env;
+
 let server = new Hapi.Server();
 
 let tls = (typeof process.env.MODE === 'undefined' || process.env.MODE === 'dev') ? {
@@ -31,7 +35,7 @@ server.route({
     method: 'GET',
     path: '/login',
     handler: function (request, reply) {
-        return reply.redirect('https://localhost:3002/login/facebook');
+        return reply.redirect(TECH_APP_LOGIN_FACEBOOK_URL);
     }
 });
 
