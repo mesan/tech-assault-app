@@ -17,13 +17,21 @@ server.connection({
 });
 
 server.route({
-    method: ['GET'],
-    path: '/',
-    config: {
-        auth: false,
-        handler: function (request, reply) {
-            return reply('Welcome!');
+    method: 'GET',
+    path: '/{param*}',
+    handler: {
+        directory: {
+            path: 'public',
+            listing: true
         }
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/login',
+    handler: function (request, reply) {
+        return reply.redirect('https://localhost:3002/login/facebook');
     }
 });
 
