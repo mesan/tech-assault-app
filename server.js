@@ -1,5 +1,6 @@
 import Hapi from 'hapi';
 import fs from 'fs';
+import socketApp from './socketApp';
 
 let {
     TECH_APP_LOGIN_FACEBOOK_URL
@@ -39,6 +40,12 @@ server.route({
     }
 });
 
-server.start(() => {
-    console.log('Server running at:', server.info.uri);
+server.register(socketApp, (err) => {
+    if (err) {
+        console.log(err);
+    }
+
+    server.start(() => {
+        console.log('Server running at:', server.info.uri);
+    });
 });

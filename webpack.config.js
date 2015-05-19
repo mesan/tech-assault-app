@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./frontend/index.js",
+    entry: "./client/index.js",
     output: {
         path: __dirname,
         filename: "./public/index.js"
