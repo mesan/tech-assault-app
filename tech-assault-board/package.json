@@ -1,0 +1,14 @@
+{
+  "name": "Gimmick",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "build": "babel script.js --out-file script-compiled.js",
+    "watch": "babel script.js --watch --out-file script-compiled.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+  }
+}
