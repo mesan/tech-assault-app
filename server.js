@@ -3,7 +3,7 @@ import fs from 'fs';
 import socketApp from './socketApp';
 
 let {
-    TECH_APP_LOGIN_TWITTER_URL
+    TECH_AUTH_ENDPOINT
 } = process.env;
 
 let server = new Hapi.Server();
@@ -27,7 +27,7 @@ server.route({
     method: 'GET',
     path: '/login',
     handler: function (request, reply) {
-        return reply.redirect(TECH_APP_LOGIN_TWITTER_URL);
+        return reply.redirect(`${TECH_AUTH_ENDPOINT}/login/twitter`);
     }
 });
 
