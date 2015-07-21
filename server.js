@@ -3,22 +3,13 @@ import fs from 'fs';
 import socketApp from './socketApp';
 
 let {
-    TECH_APP_LOGIN_FACEBOOK_URL
+    TECH_APP_LOGIN_TWITTER_URL
 } = process.env;
 
 let server = new Hapi.Server();
 
-let tls = (typeof process.env.MODE === 'undefined' || process.env.MODE === 'dev') ? {
-    key: fs.readFileSync('./ssl/server.key'),
-    cert: fs.readFileSync('./ssl/server.crt'),
-    ca: fs.readFileSync('./ssl/ca.crt'),
-    requestCert: true,
-    rejectUnauthorized: false
-} : undefined;
-
 server.connection({
-    port: process.env.PORT || 3000,
-    tls: tls
+    port: process.env.PORT || 3000
 });
 
 server.route({
@@ -36,7 +27,7 @@ server.route({
     method: 'GET',
     path: '/login',
     handler: function (request, reply) {
-        return reply.redirect(TECH_APP_LOGIN_FACEBOOK_URL);
+        return reply.redirect(TECH_APP_LOGIN_TWITTER_URL);
     }
 });
 
