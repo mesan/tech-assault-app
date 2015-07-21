@@ -2,7 +2,8 @@
 
 ## Description
 
-Service serving the frontend web application to the client and handling WS events between the server and the client.
+TechAssault service serving the frontend web application to the client and handling WS events between the server
+and the client.
 
 ## Contributors
 

@@ -4,6 +4,6 @@ let {
     TECH_DOMAIN_ENDPOINT
 } = process.env;
 
-export default function postEnlistmentRequest(userId) {
-    return request('POST', `${TECH_DOMAIN_ENDPOINT}/enlistments/${userId}`).pend();
+export default function postEnlistmentRequest(userToken) {
+    return request('POST', `${TECH_DOMAIN_ENDPOINT}/enlistments/${userToken}`).pend();
 }
