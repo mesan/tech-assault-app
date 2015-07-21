@@ -1,8 +1,9 @@
 import getQuery from './util/urlQuery';
 import io from 'socket.io-client';
-import tokenRequest from './events/tokenRequest';
+import tokenRequest from './eventHandlers/tokenRequest';
 
 (function () {
+
     if(typeof(Storage) === 'undefined') {
         window.alert('Please use a browser that supports local storage.');
     }
@@ -25,4 +26,8 @@ import tokenRequest from './events/tokenRequest';
 
     socket.on('tokenRequest', tokenRequest);
 
+    document.getElementById('enlist').addEventListener('click', function (event) {
+        event.preventDefault();
+        socket.emit('opponentEnlisted');
+    });
 })();

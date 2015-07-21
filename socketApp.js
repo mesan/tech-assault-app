@@ -1,7 +1,8 @@
 import socketIO from 'socket.io';
 
 // Events
-import token from './events/token';
+import tokenEventHandler from './eventHandlers/tokenEventHandler';
+import enlistOpponentEventHandler from './eventHandlers/enlistOpponentEventHandler';
 
 function register(server, options, next) {
     var io = require('socket.io')(server.listener);
@@ -9,7 +10,9 @@ function register(server, options, next) {
     io.on('connection', function (socket) {
         socket.emit('tokenRequest'); 
 
-        socket.on('token', token);
+        socket.on('token', tokenEventHandler);
+
+        socket.on('opponentEnlisted', enlistOpponentEventHandler);
     });
 
     next();
