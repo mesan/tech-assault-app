@@ -1,10 +1,5 @@
 import superagent from 'superagent';
 
-let {
-    TECH_AUTH_ENDPOINT,
-    TECH_DOMAIN_ENDPOINT
-} = process.env;
-
 export default function request() {
     let req = superagent.apply(superagent, arguments);
 
