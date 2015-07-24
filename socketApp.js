@@ -1,19 +1,34 @@
 import socketIO from 'socket.io';
 
-// Events
-import tokenEventHandler from './eventHandlers/tokenEventHandler';
-import enlistOpponentEventHandler from './eventHandlers/enlistOpponentEventHandler';
+import Events from './constants/Events';
+
+// Client events
+import tokenEventHandler from './clientEventHandlers/tokenEventHandler';
+import enlistOpponentEventHandler from './clientEventHandlers/enlistOpponentEventHandler';
+import disconnectEventHandler from './clientEventHandlers/disconnectEventHandler';
+
+// Timed events.
+import findMatchesEventHandler from './timedEventHandlers/findMatchesEventHandler';
+
+let tokenSocketMap = {};
 
 function register(server, options, next) {
-    var io = require('socket.io')(server.listener);
+    server.tokenSocketMap = tokenSocketMap;
 
-    io.on('connection', function (socket) {
-        socket.emit('tokenRequest'); 
+    var io = socketIO(server.listener);
 
-        socket.on('token', tokenEventHandler);
+    io.on(Events.connection, (socket) => {
 
-        socket.on('opponentEnlisted', enlistOpponentEventHandler);
+        const requestContext = { server, socket };
+
+        socket.emit(Events.tokenRequested);
+
+        socket.on(Events.tokenSent, tokenEventHandler.bind(requestContext));
+        socket.on(Events.opponentEnlisted, enlistOpponentEventHandler.bind(requestContext));
+        socket.on(Events.disconnect, disconnectEventHandler.bind(requestContext));
     });
+
+    setInterval(findMatchesEventHandler.bind(server), 5000);
 
     next();
 };

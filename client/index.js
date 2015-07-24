@@ -1,33 +1,31 @@
-import getQuery from './util/urlQuery';
 import io from 'socket.io-client';
-import tokenRequest from './eventHandlers/tokenRequest';
+import getUserToken from './util/getUserToken';
+import Events from '../constants/Events';
+
+// Server events.
+import tokenRequestedEventHandler from './eventHandlers/tokenRequestedEventHandler';
+
 
 (function () {
 
-    if(typeof(Storage) === 'undefined') {
-        window.alert('Please use a browser that supports local storage.');
-    }
+    const userToken = getUserToken();
 
-    let token = getQuery('token');
-
-    if (token) {
-        window.localStorage.setItem('token', token);
-    }
-
-    let storedToken = window.localStorage.getItem('token');
-
-    if (!storedToken) {
+    if (!userToken) {
         return;
     }
 
-    var socket = io();
+    const socket = io();
 
-    socket.token = storedToken;
+    socket.token = userToken;
 
-    socket.on('tokenRequest', tokenRequest);
+    socket.on(Events.tokenRequested, tokenRequestedEventHandler);
+
+    socket.on(Events.opponentFound, (game) => {
+        console.log(game);
+    });
 
     document.getElementById('enlist').addEventListener('click', function (event) {
         event.preventDefault();
-        socket.emit('opponentEnlisted');
+        socket.emit(Events.opponentEnlisted);
     });
 })();
