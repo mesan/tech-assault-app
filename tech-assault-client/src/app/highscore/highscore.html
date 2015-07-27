@@ -1,0 +1,24 @@
+<div class="container">
+
+  <div class="jumbotron text-center">
+    <h1 class="">Top Scores</h1>
+    <a href="/#/">Back</a>
+
+  <table class="table table-striped text-left">
+    <th>#</th>
+    <th>Name</th>
+    <th>Score</th>
+
+    <tr ng-repeat="entry in vm.scores">
+      <td>{{$index + 1}}</td>
+      <td>{{entry.name}}</td>
+      <td>{{entry.score}}</td>
+    </tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>Made by <a href="http://mesan.no/">Mesan</a></p>
+  </div>
+
+</div>
