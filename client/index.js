@@ -3,7 +3,7 @@ import getUserToken from './util/getUserToken';
 import Events from '../constants/Events';
 
 // Server events.
-import tokenRequestedEventHandler from './eventHandlers/tokenRequestedEventHandler';
+import eventHandlers from './eventHandlers';
 
 
 (function () {
@@ -18,11 +18,10 @@ import tokenRequestedEventHandler from './eventHandlers/tokenRequestedEventHandl
 
     socket.token = userToken;
 
-    socket.on(Events.tokenRequested, tokenRequestedEventHandler);
-
-    socket.on(Events.opponentFound, (game) => {
-        console.log(game);
-    });
+    socket.on(Events.loginRequested, eventHandlers.loginRequestedEventHandler);
+    socket.on(Events.loginAccepted, eventHandlers.loginAcceptedEventHandler);
+    socket.on(Events.loginRefused, eventHandlers.loginRefusedEventHandler);
+    socket.on(Events.opponentFound, eventHandlers.opponentFoundEventHandler);
 
     document.getElementById('enlist').addEventListener('click', function (event) {
         event.preventDefault();

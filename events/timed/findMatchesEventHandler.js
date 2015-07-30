@@ -1,6 +1,6 @@
-import requestMatches from '../util/requests/requestMatches';
-import requestPostEnlistment from '../util/requests/requestPostEnlistment';
-import Events from '../constants/Events';
+import requestMatches from '../../util/requests/requestMatches';
+import requestPostEnlistment from '../../util/requests/requestPostEnlistment';
+import Events from '../../constants/Events';
 
 /**
  * At intervals, the system checks for players that have enlisted themselves for matches. The system matches players

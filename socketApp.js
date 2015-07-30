@@ -3,12 +3,14 @@ import socketIO from 'socket.io';
 import Events from './constants/Events';
 
 // Client events
-import tokenEventHandler from './clientEventHandlers/tokenEventHandler';
-import enlistOpponentEventHandler from './clientEventHandlers/enlistOpponentEventHandler';
-import disconnectEventHandler from './clientEventHandlers/disconnectEventHandler';
+import {
+    loginEventHandler,
+    enlistOpponentEventHandler,
+    disconnectEventHandler
+} from './events/fromClient';
 
 // Timed events.
-import findMatchesEventHandler from './timedEventHandlers/findMatchesEventHandler';
+import findMatchesEventHandler from './events/timed/findMatchesEventHandler';
 
 let tokenSocketMap = {};
 
@@ -21,9 +23,9 @@ function register(server, options, next) {
 
         const requestContext = { server, socket };
 
-        socket.emit(Events.tokenRequested);
+        socket.emit(Events.loginRequested);
 
-        socket.on(Events.tokenSent, tokenEventHandler.bind(requestContext));
+        socket.on(Events.login, loginEventHandler.bind(requestContext));
         socket.on(Events.opponentEnlisted, enlistOpponentEventHandler.bind(requestContext));
         socket.on(Events.disconnect, disconnectEventHandler.bind(requestContext));
     });

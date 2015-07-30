@@ -6,9 +6,13 @@ export default keyMirror({
 
     disconnect: null, // A client disconnects.
 
-    tokenRequested: null, // The server requests the user token from a client.
+    loginRequested: null, // The server requests the user token from a client.
 
-    tokenSent: null, // The client sends his user token to the server.
+    login: null, // The client sends his user token to the server.
+
+    loginAccepted: null, // The server accepts user login and sends user info to the client.
+
+    loginRefused: null, // The server refuses user login (token not found) and sends reason to the client.
 
     opponentEnlisted: null, // The player enlists for a match.
 

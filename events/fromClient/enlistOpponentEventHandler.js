@@ -1,4 +1,4 @@
-import requestPostEnlistment from '../util/requests/requestPostEnlistment';
+import requestPostEnlistment from '../../util/requests/requestPostEnlistment';
 
 export default function enlistOpponentEventHandler() {
     requestPostEnlistment(this.socket.token)
