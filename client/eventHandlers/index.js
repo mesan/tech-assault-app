@@ -1,11 +1,11 @@
-import loginRequestedEventHandler from './loginRequestedEventHandler';
-import loginAcceptedEventHandler from './loginAcceptedEventHandler';
-import loginRefusedEventHandler from './loginRefusedEventHandler';
-import opponentFoundEventHandler from './opponentFoundEventHandler';
+import onLoginRequested from './onLoginRequested';
+import onLoginAccepted from './onLoginAccepted';
+import onLoginRefused from './onLoginRefused';
+import onOpponentFound from './onOpponentFound';
 
 export default {
-    loginRequestedEventHandler,
-    loginAcceptedEventHandler,
-    loginRefusedEventHandler,
-    opponentFoundEventHandler
+    onLoginRequested,
+    onLoginAccepted,
+    onLoginRefused,
+    onOpponentFound
 };

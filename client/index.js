@@ -5,7 +5,6 @@ import Events from '../constants/Events';
 // Server events.
 import eventHandlers from './eventHandlers';
 
-
 (function () {
 
     const userToken = getUserToken();
@@ -18,10 +17,10 @@ import eventHandlers from './eventHandlers';
 
     socket.token = userToken;
 
-    socket.on(Events.loginRequested, eventHandlers.loginRequestedEventHandler);
-    socket.on(Events.loginAccepted, eventHandlers.loginAcceptedEventHandler);
-    socket.on(Events.loginRefused, eventHandlers.loginRefusedEventHandler);
-    socket.on(Events.opponentFound, eventHandlers.opponentFoundEventHandler);
+    socket.on(Events.loginRequested, eventHandlers.onLoginRequested);
+    socket.on(Events.loginAccepted, eventHandlers.onLoginAccepted);
+    socket.on(Events.loginRefused, eventHandlers.onLoginRefused);
+    socket.on(Events.opponentFound, eventHandlers.onOpponentFound);
 
     document.getElementById('enlist').addEventListener('click', function (event) {
         event.preventDefault();
