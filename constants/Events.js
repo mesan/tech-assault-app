@@ -14,7 +14,7 @@ export default keyMirror({
 
     loginRefused: null, // The server refuses user login (token not found) and sends reason to the client.
 
-    opponentEnlisted: null, // The player enlists for a match.
+    playerEnlisted: null, // The player enlists for a match.
 
     opponentFound: null // The server informs the player that an opponent has been found.
 });

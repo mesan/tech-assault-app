@@ -7,7 +7,7 @@ import Events from '../../constants/Events';
  * one-on-one. If a player is not connected when he/she is matched with another, the other player is immediately
  * re-enlisted.
  */
-export default function findMatchesEventHandler() {
+export default function onFindMatches() {
     requestMatches()
         .then((matches) => {
             for (let i = 0; i < matches.length; i++) {

@@ -1,3 +1,3 @@
-export default function loginAcceptedEventHandler(user) {
+export default function onLoginAccepted(user) {
     console.log('login accepted', user);
 }

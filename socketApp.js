@@ -2,15 +2,8 @@ import socketIO from 'socket.io';
 
 import Events from './constants/Events';
 
-// Client events
-import {
-    loginEventHandler,
-    enlistOpponentEventHandler,
-    disconnectEventHandler
-} from './events/fromClient';
-
-// Timed events.
-import findMatchesEventHandler from './events/timed/findMatchesEventHandler';
+// Timed events and events from client.
+import eventHandlers from './eventHandlers';
 
 let tokenSocketMap = {};
 
@@ -25,12 +18,12 @@ function register(server, options, next) {
 
         socket.emit(Events.loginRequested);
 
-        socket.on(Events.login, loginEventHandler.bind(requestContext));
-        socket.on(Events.opponentEnlisted, enlistOpponentEventHandler.bind(requestContext));
-        socket.on(Events.disconnect, disconnectEventHandler.bind(requestContext));
+        socket.on(Events.login, eventHandlers.fromClient.onLogin.bind(requestContext));
+        socket.on(Events.playerEnlisted, eventHandlers.fromClient.onPlayerEnlisted.bind(requestContext));
+        socket.on(Events.disconnect, eventHandlers.fromClient.onDisconnect.bind(requestContext));
     });
 
-    setInterval(findMatchesEventHandler.bind(server), 5000);
+    setInterval(eventHandlers.timed.onFindMatches.bind(server), 5000);
 
     next();
 };

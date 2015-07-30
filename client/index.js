@@ -24,6 +24,6 @@ import eventHandlers from './eventHandlers';
 
     document.getElementById('enlist').addEventListener('click', function (event) {
         event.preventDefault();
-        socket.emit(Events.opponentEnlisted);
+        socket.emit(Events.playerEnlisted);
     });
 })();

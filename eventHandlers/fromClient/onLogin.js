@@ -2,7 +2,7 @@ import Events from '../../constants/Events';
 
 import requestUserByToken from '../../util/requests/requestUserByToken';
 
-export default function loginEventHandler(userToken) {
+export default function onLogin(userToken) {
     requestUserByToken(userToken)
         .then(({ responseBody }) => {
             this.server.tokenSocketMap[userToken] = this.socket;
