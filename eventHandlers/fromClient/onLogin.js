@@ -4,7 +4,7 @@ import requestUserByToken from '../../util/requests/requestUserByToken';
 
 export default function onLogin(userToken) {
     requestUserByToken(userToken)
-        .then(({ responseBody }) => {
+        .then((user) => {
             this.server.tokenSocketMap[userToken] = this.socket;
             this.socket.token = userToken;
 
