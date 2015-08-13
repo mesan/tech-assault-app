@@ -27,4 +27,9 @@ import eventHandlers from './eventHandlers';
         event.preventDefault();
         socket.emit(Events.playerEnlisted);
     });
+
+    document.getElementById('perform').addEventListener('click', function (event) {
+        event.preventDefault();
+        socket.emit(Events.performTurn, { action: 'cardPlaced', cardId: '123', position: 5 });
+    });
 })();

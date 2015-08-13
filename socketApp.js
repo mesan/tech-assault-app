@@ -21,6 +21,7 @@ function register(server, options, next) {
         socket.on(Events.login, eventHandlers.fromClient.onLogin.bind(requestContext));
         socket.on(Events.playerEnlisted, eventHandlers.fromClient.onPlayerEnlisted.bind(requestContext));
         socket.on(Events.disconnect, eventHandlers.fromClient.onDisconnect.bind(requestContext));
+        socket.on(Events.performTurn, eventHandlers.fromClient.onPerformTurn.bind(requestContext));
     });
 
     setInterval(eventHandlers.timed.onFindMatches.bind(server), 5000);

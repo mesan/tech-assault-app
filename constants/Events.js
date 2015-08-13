@@ -20,7 +20,9 @@ export default keyMirror({
 
     matchStarted: null, // The server informs the client that an opponent has been found and a match has been started.
 
-    performTurn: null, // The client informs the server that the player performs his turn.
+    performTurn: null,  // The client informs the server that the player has performed his turn.
 
-    turnPerformed: null // The server informs the clients that the acting player has performed his turn.
+    turnPerformed: null // The server informs both clients that the player has performed his turn, and that it now is
+                        // the other player's turn.
+
 });
