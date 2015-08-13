@@ -1,13 +1,13 @@
 import onLoginRequested from './onLoginRequested';
 import onLoginAccepted from './onLoginAccepted';
 import onLoginRefused from './onLoginRefused';
-import onOpponentFound from './onOpponentFound';
 import onUserUnauthorized from './onUserUnauthorized';
+import onMatchStarted from './onMatchStarted';
 
 export default {
     onLoginRequested,
     onLoginAccepted,
     onLoginRefused,
-    onOpponentFound,
-    onUserUnauthorized
+    onUserUnauthorized,
+    onMatchStarted
 };

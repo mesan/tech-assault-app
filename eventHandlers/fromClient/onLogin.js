@@ -8,7 +8,7 @@ export default function onLogin(userToken) {
             this.server.tokenSocketMap[userToken] = this.socket;
             this.socket.token = userToken;
 
-            const { name, avatar } = responseBody;
+            const { name, avatar } = user;
 
             this.socket.emit(Events.loginAccepted, { name, avatar });
         })

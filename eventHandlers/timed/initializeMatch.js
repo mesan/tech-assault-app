@@ -18,10 +18,4 @@ export default function initializeMatch(userToken1, userToken2) {
             match.users = users;
             return match;
         });
-
-    // Generate match ID.
-    // Get user information.
-    // Generate a board instance.
-    // Calculate first turn.
-    // Get primary decks of players.
 }

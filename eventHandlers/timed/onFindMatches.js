@@ -41,9 +41,10 @@ export default function onFindMatches() {
                 initializeMatch(userToken1, userToken2)
                     .then(mapToMatchesPerUser)
                     .then(([match1, match2]) => {
-                        socket1.emit(Events.opponentFound, match1);
-                        socket2.emit(Events.opponentFound, match2);
-                    });
+                        socket1.emit(Events.matchStarted, match1);
+                        socket2.emit(Events.matchStarted, match2);
+                    })
+                    .catch(console.error.bind(console));
             }
         });
 }

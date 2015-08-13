@@ -1,5 +1,4 @@
 export default function mapToMatchesPerUser(match) {
-    console.log(match);
     const { board, nextTurn, score, actions, cards, users } = match;
     const [player1primaryDeck, player2primaryDeck] = match.primaryDecks;
 

@@ -18,5 +18,9 @@ export default keyMirror({
 
     playerEnlisted: null, // The player enlists for a match.
 
-    opponentFound: null // The server informs the player that an opponent has been found.
+    matchStarted: null, // The server informs the client that an opponent has been found and a match has been started.
+
+    performTurn: null, // The client informs the server that the player performs his turn.
+
+    turnPerformed: null // The server informs the clients that the acting player has performed his turn.
 });
