@@ -7,8 +7,11 @@ import eventHandlers from './eventHandlers';
 
 let tokenSocketMap = {};
 
+let matchMap = {};
+
 function register(server, options, next) {
     server.tokenSocketMap = tokenSocketMap;
+    server.matchMap = matchMap;
 
     var io = socketIO(server.listener);
 

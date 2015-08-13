@@ -22,6 +22,7 @@ import eventHandlers from './eventHandlers';
     socket.on(Events.loginRefused, eventHandlers.onLoginRefused);
     socket.on(Events.userUnauthorized, eventHandlers.onUserUnauthorized);
     socket.on(Events.matchStarted, eventHandlers.onMatchStarted);
+    socket.on(Events.turnPerformed, eventHandlers.onTurnPerformed);
 
     document.getElementById('enlist').addEventListener('click', function (event) {
         event.preventDefault();
@@ -30,6 +31,12 @@ import eventHandlers from './eventHandlers';
 
     document.getElementById('perform').addEventListener('click', function (event) {
         event.preventDefault();
-        socket.emit(Events.performTurn, { action: 'cardPlaced', cardId: '123', position: 5 });
+        socket.emit(
+            Events.performTurn,
+            {
+                actionType: 'cardPlaced',
+                cardId: document.getElementById('cardid').value,
+                cardPosition: parseInt(document.getElementById('cardpos').value)
+            });
     });
 })();

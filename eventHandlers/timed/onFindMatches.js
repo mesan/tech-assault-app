@@ -38,8 +38,12 @@ export default function onFindMatches() {
                     continue;
                 }
 
+
                 initializeMatch(userToken1, userToken2)
-                    .then(mapToMatchesPerUser)
+                    .then((match) => {
+                        this.matchMap[match.matchId] = [ userToken1, userToken2 ];
+                        return mapToMatchesPerUser(match);
+                    })
                     .then(([match1, match2]) => {
                         socket1.emit(Events.matchStarted, match1);
                         socket2.emit(Events.matchStarted, match2);
