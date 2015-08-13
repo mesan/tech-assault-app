@@ -4,9 +4,9 @@ let {
     TECH_DOMAIN_ENDPOINT
 } = process.env;
 
-export default function requestCreateMatch(userId1, userId2) {
+export default function requestCreateMatch(user1, user2) {
     return request('POST', `${TECH_DOMAIN_ENDPOINT}/matches`)
-        .send([ userId1, userId2 ])
+        .send([ user1, user2 ])
         .pend()
         .then(response => JSON.parse(response.text));
 }

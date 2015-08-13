@@ -12,7 +12,7 @@ export default function initializeMatch(userToken1, userToken2) {
         .then(([user1, user2]) => {
             users = [user1, user2];
 
-            return requestCreateMatch(user1.id, user2.id);
+            return requestCreateMatch(user1, user2);
         })
         .then((match) => {
             match.users = users;
