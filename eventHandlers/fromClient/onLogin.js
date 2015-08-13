@@ -8,9 +8,9 @@ export default function onLogin(userToken) {
             this.server.tokenSocketMap[userToken] = this.socket;
             this.socket.token = userToken;
 
-            const { name, avatar } = user;
+            const { id, name, avatar } = user;
 
-            this.socket.emit(Events.loginAccepted, { name, avatar });
+            this.socket.emit(Events.loginAccepted, { id, name, avatar });
         })
         .catch((err) => {
             if (err.status === 404) {
