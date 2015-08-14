@@ -7,23 +7,42 @@ import mapToMatchesPerUser from '../timed/mapToMatchesPerUser';
 export default function onPerformTurn(turn) {
     const { socket, server } = this;
     const { token } = socket;
+    const { tokenSocketMap, matchMap } = server;
+
+    let user;
 
     requestUserByToken(token)
-        .then(user => requestPostTurn(user.id, turn))
+        .then(userByToken => {
+            user = userByToken;
+            return requestPostTurn(user.id, turn);
+        })
         .then(match => {
-            const [match1, match2] = mapToMatchesPerUser(match);
+            const userIndex = match.users.map(user => user.id).indexOf(user.id);
+            const opponentIndex = userIndex === 0 ? 1 : 0;
 
-            const userTokens = server.matchMap[match.matchId];
+            const matchesPerUser = mapToMatchesPerUser(match);
 
-            const [ otherToken ] = userTokens.filter(userToken => userToken !== token);
+            socket.emit(Events.turnPerformed, matchesPerUser[userIndex]);
 
-            const opponentSocket = server.tokenSocketMap[otherToken];
+            const userTokens = matchMap[match.matchId];
 
-            const socket1 = userTokens.indexOf(token) === 0 ? socket : opponentSocket;
-            const socket2 = socket1 === socket ? opponentSocket : socket;
+            const otherTokens = userTokens.filter(userToken => userToken !== token);
 
-            socket1.emit(Events.turnPerformed, match1);
-            socket2.emit(Events.turnPerformed, match2);
+            if (!otherTokens) {
+                console.log('No opponent to send turnPerformed event to.');
+                return;
+            }
+
+            const otherToken = otherTokens[0];
+
+            const opponentSocket = tokenSocketMap[otherToken];
+
+            if (!opponentSocket) {
+                console.log('No opponent to send turnPerformed event to.');
+                return;
+            }
+
+            opponentSocket.emit(Events.turnPerformed, matchesPerUser[opponentIndex]);
         })
         .catch(err => console.error(err));
 }

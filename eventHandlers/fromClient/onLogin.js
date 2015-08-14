@@ -5,9 +5,12 @@ import requestActiveMatchByUserId from '../../util/requests/requestActiveMatchBy
 import mapToMatchesPerUser from '../timed/mapToMatchesPerUser';
 
 export default function onLogin(userToken) {
+    const { tokenSocketMap, matchMap } = this.server;
+
     requestUserByToken(userToken)
         .then((user) => {
-            this.server.tokenSocketMap[userToken] = this.socket;
+            tokenSocketMap[userToken] = this.socket;
+
             this.socket.token = userToken;
 
             const { id, name, avatar } = user;
@@ -15,7 +18,19 @@ export default function onLogin(userToken) {
             this.socket.emit(Events.loginAccepted, { id, name, avatar });
 
             requestActiveMatchByUserId(id)
-                .then(mapToMatchesPerUser)
+                .then(match => {
+                    const { matchId } = match;
+
+                    const userIndex = match.users.map(user => user.id).indexOf(id);
+
+                    if (!matchMap[matchId]) {
+                        matchMap[matchId] = [];
+                    }
+
+                    matchMap[matchId][userIndex] = userToken;
+
+                    return mapToMatchesPerUser(match);
+                })
                 .then((matchesPerUser) => {
                     const userIndex = matchesPerUser[0].users.map(user => user.id).indexOf(id);
                     const matchForUser = matchesPerUser[userIndex];
