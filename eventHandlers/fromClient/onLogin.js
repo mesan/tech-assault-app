@@ -7,37 +7,42 @@ import mapToMatchesPerUser from '../timed/mapToMatchesPerUser';
 export default function onLogin(userToken) {
     const { tokenSocketMap, matchMap } = this.server;
 
+    let user;
+
     requestUserByToken(userToken)
-        .then((user) => {
+        .then((userByToken) => {
+            user = userByToken;
+
             tokenSocketMap[userToken] = this.socket;
 
             this.socket.token = userToken;
 
             const { id, name, avatar } = user;
 
-            this.socket.emit(Events.loginAccepted, { id, name, avatar });
+            this.socket.emit(Events.loginAccepted, {id, name, avatar});
 
-            requestActiveMatchByUserId(id)
-                .then(match => {
-                    const { matchId } = match;
+            return requestActiveMatchByUserId(id);
+        })
+        .then(match => {
+            if (!match) {
+                return;
+            }
 
-                    const userIndex = match.users.map(user => user.id).indexOf(id);
+            const { matchId } = match;
 
-                    if (!matchMap[matchId]) {
-                        matchMap[matchId] = [];
-                    }
+            const userIndex = match.users.map(user => user.id).indexOf(user.id);
 
-                    matchMap[matchId][userIndex] = userToken;
+            if (!matchMap[matchId]) {
+                matchMap[matchId] = [];
+            }
 
-                    return mapToMatchesPerUser(match);
-                })
-                .then((matchesPerUser) => {
-                    const userIndex = matchesPerUser[0].users.map(user => user.id).indexOf(id);
-                    const matchForUser = matchesPerUser[userIndex];
+            matchMap[matchId][userIndex] = userToken;
 
-                    this.socket.emit(Events.matchStarted, matchForUser);
-                })
-                .catch(err => console.log(err));
+            const matchesPerUser = mapToMatchesPerUser(match);
+
+            const matchForUser = matchesPerUser[userIndex];
+
+            this.socket.emit(Events.matchStarted, matchForUser);
         })
         .catch((err) => {
             if (err.status === 404) {

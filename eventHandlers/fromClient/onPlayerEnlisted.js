@@ -1,15 +1,22 @@
 import requestPostEnlistment from '../../util/requests/requestPostEnlistment';
 import requestUserByToken from '../../util/requests/requestUserByToken';
+import requestActiveMatchByUserId from '../../util/requests/requestActiveMatchByUserId';
 
 import Events from '../../constants/Events';
 
 export default function onPlayerEnlisted() {
-    requestUserByToken(this.socket.token)
-        .then((user) => {
-            return requestPostEnlistment(this.socket.token);
+    const { token } = this.socket;
+
+    requestUserByToken(token)
+        .then(user => requestActiveMatchByUserId(user.id))
+        .then(match => {
+            if (match) {
+                return this.socket.emit(Events.userUnauthorized, { event: Events.playerEnlisted, reason: 'In match' });
+            }
+
+            return requestPostEnlistment(token);
         })
         .catch((err) => {
-            console.log(err.status);
             if (err.status === 404) {
                 this.socket.emit(Events.userUnauthorized, { event: Events.playerEnlisted, reason: 'Not Found' });
             }
