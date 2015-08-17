@@ -1,12 +1,13 @@
 var renderController = function () {
+	const boardSize = 4;
 	let game = null;
 	let board = null;
 	let topHand = null;
 	let bottomHand = null;
 	
-	let getX = x => (board.offsetWidth / 4) * x;
+	let getX = x => (board.offsetWidth / boardSize) * x;
 	
-	let getY = y => (board.offsetHeight / 4) * y + topHand.offsetHeight + 10;
+	let getY = y => (board.offsetHeight / boardSize) * y + topHand.offsetHeight + 10;
 	
 	let updateBoardCard = (id, pos, transition) => {
 		let element = document.querySelector(`#${id}`);
@@ -15,10 +16,10 @@ var renderController = function () {
 			element.style.transitionDuration = "0.5s";
 		}
 		
-		element.style.left = `${getX(pos % 4)}px`;
-		element.style.top = `${getY(Math.floor(pos / 4))}px`;
-		element.style.height = `${board.offsetHeight / 4}px`;
-		element.style.width = `${board.offsetWidth / 4}px`;
+		element.style.left = `${getX(pos % boardSize)}px`;
+		element.style.top = `${getY(Math.floor(pos / boardSize))}px`;
+		element.style.height = `${board.offsetHeight / boardSize}px`;
+		element.style.width = `${board.offsetWidth / boardSize}px`;
 		element.style.transitionDuration = "";
 	}
 	
@@ -39,11 +40,11 @@ var renderController = function () {
 		let bWidth = 0;
 		
 		// TODO: make readable
-		if (gWidth < (gHeight * (4 / 5.6) - 20)) {
+		if (gWidth < (gHeight * (boardSize / 5.6) - 20)) {
 			bWidth = gWidth;
 			bHeight = bWidth;
 		} else {
-			bHeight = gHeight * (4 / 5.6) - 20;
+			bHeight = gHeight * (boardSize / 5.6) - 20;
 			bWidth = bHeight;
 		}
 		
@@ -145,5 +146,146 @@ var p2Cards  = [
 	{ id: "p2c4" },
 	{ id: "p2c5" }
 ];
+
+let testData = {
+    "players": [
+        {
+            "id": "tw-123",
+            "name": "Arild Tvergrov",
+            "avatar": "http://url"
+        },
+        {
+            "id": "tw-555",
+            "name": "John Doe",
+            "avatar": "http://url"
+        }
+    ],
+    "board": [
+        0, 0, 0, 0,
+        1, "3cf8cc21-0bdc-48c0-9674-019232cb3c2b", 0, "88679725-8b41-4e2f-9e94-063dfc41586b",
+        1, 1, "2a5f316e-b55f-4c3d-866b-2c27737b5cd5", 0,
+        0, 0, 0, "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6"
+    ],
+    "score": [
+        4,
+        0
+    ],
+    "nextTurn": "tw-555",
+    "actions": [
+        {
+            "player": "tw-555",
+            "type": "cardPlaced",
+            "cardId": "88679725-8b41-4e2f-9e94-063dfc41586b",
+            "cardPosition": 15,
+            "events": []
+        },
+        {
+            "player": "tw-123",
+            "type": "cardPlaced",
+            "cardId": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
+            "cardPosition": 15,
+            "events": []
+        },
+        {
+            "player": "tw-555",
+            "type": "cardPlaced",
+            "cardId": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
+            "cardPosition": 10,
+            "events": []
+        },
+        {
+            "player": "tw-123",
+            "type": "cardPlaced",
+            "cardId": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
+            "cardPosition": 5,
+            "events": [
+                {
+                    "type": "battle",
+                    "opposingCardId": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
+                    "opposingCardPosition": 10,
+                    "cardPower": 123,
+                    "opposingCardPower": 118
+                },
+                {
+                    "type": "takeOver",
+                    "newOwner": "tw-123",
+                    "cardId": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
+                    "cardPosition": 10
+                },
+                {
+                    "type": "takeOver",
+                    "newOwner": "tw-123",
+                    "cardId": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
+                    "cardPosition": 15
+                }
+            ]
+        }
+    ],
+    "cards": [
+        {
+            "id": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
+            "name": "C#",
+            "image": "url",
+            "owner": "tw-123",
+            "attack": 2,
+            "defense": 1,
+            "arrows": [0, 0, 0, 1, 0, 0, 0, 0]
+        },
+        {
+            "id": "88679725-8b41-4e2f-9e94-063dfc41586b",
+            "name": "Azure",
+            "image": "url",
+            "owner": "tw-123",
+            "attack": 2,
+            "defense": 3,
+            "arrows": [0, 0, 0, 0, 0, 0, 1, 1]
+        },
+        {
+            "id": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
+            "name": "Python",
+            "image": "url",
+            "owner": "tw-123",
+            "attack": 3,
+            "defense": 2,
+            "arrows": [0, 0, 0, 1, 0, 0, 0, 1]
+        },
+        {
+            "id": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
+            "name": "PHP",
+            "image": "url",
+            "owner": "tw-123",
+            "attack": 1,
+            "defense": 0,
+            "arrows": [0, 0, 1, 0, 0, 0, 0, 0]
+        }
+    ],
+    "primaryDeck": [
+        {
+            "id": "68526f18-2bd3-4e2a-ba1f-03e89a392bf8",
+            "name": "Ruby on Rails",
+            "image": "url",
+            "attack": 1,
+            "defense": 2,
+            "arrows": [1, 0, 0, 0, 1, 1, 0, 0]
+        },
+        {
+            "id": "e135a246-fb51-43bc-a6da-eb228984dba2",
+            "name": "Ruby on Rails",
+            "image": "url",
+            "attack": 1,
+            "defense": 2,
+            "arrows": [1, 0, 0, 0, 1, 1, 0, 0]
+        },
+        {
+            "id": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
+            "name": "Heroku",
+            "image": "url",
+            "attack": 3,
+            "defense": 0,
+            "arrows": [0, 0, 1, 0, 0, 1, 0, 0]
+        }
+    ],
+    "opponentPrimaryDeckSize": 3
+};
 
 gameController.init(p1Cards, p2Cards);
