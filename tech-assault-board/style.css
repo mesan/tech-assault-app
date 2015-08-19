@@ -32,6 +32,10 @@ html, body {
 	height: 25%;
 }
 
+.tile-rock {
+	background-color: #647587;
+}
+
 .hand > .tile {
 	width: 20%;
 	height: 100%;

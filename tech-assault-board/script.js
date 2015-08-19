@@ -10,7 +10,7 @@ var renderController = function () {
 	let getY = y => (board.offsetHeight / boardSize) * y + topHand.offsetHeight + 10;
 	
 	let updateBoardCard = (id, pos, transition) => {
-		let element = document.querySelector(`#${id}`);
+		let element = document.querySelector(`[id='${id}'`);
 		
 		if (transition) {
 			element.style.transitionDuration = "0.5s";
@@ -25,7 +25,7 @@ var renderController = function () {
 	
 	let updateHandCard = (id, hand, isBottomHand) => {
 		let i = hand.findIndex(c => c && c.id === id);
-		let card = document.querySelector(`#${id}`);
+		let card = document.querySelector(`[id='${id}'`);
 		
 		card.style.width = `${board.offsetWidth / 5}px`;
 		card.style.height = `${board.offsetHeight / 5}px`;
@@ -33,13 +33,13 @@ var renderController = function () {
 		card.style.left = `${(board.offsetWidth / 5) * i}px`;
 	}
 	
-	let updateBoard = (bottomCards, topCards, boardCards) => {
+	let updateBoard = (playerCards, opponentCardCount, tiles, cards) => {
 		let gHeight = game.offsetHeight;
 		let gWidth = game.offsetWidth;
 		let bHeight = 0;
 		let bWidth = 0;
 		
-		// TODO: make readable
+		// Scale tile sizes to portrait/landscape
 		if (gWidth < (gHeight * (boardSize / 5.6) - 20)) {
 			bWidth = gWidth;
 			bHeight = bWidth;
@@ -56,9 +56,13 @@ var renderController = function () {
 		bottomHand.style.width = `${bWidth}px`;
 		bottomHand.style.height = `${bWidth / 5}px`;
 		
-		bottomCards.filter(c => c !== null).forEach(c => updateHandCard(c.id, bottomCards, true));
-		topCards.filter(c => c !== null).forEach(c => updateHandCard(c.id, topCards, false));
-		boardCards.forEach(c => updateBoardCard(c.id, c.pos));
+		playerCards.forEach(c => updateHandCard(c.id, playerCards, true));
+		// topCards.filter(c => c !== null).forEach(c => updateHandCard(c.id, topCards, false));
+		for (var i = 0; i < tiles.length; i++) {
+			if (typeof tiles[i] === "string") {
+				updateBoardCard(tiles[i], i);
+			}
+		}
 	};
 	
 	let createElement = (type, classes = [], id = null) => {
@@ -77,25 +81,33 @@ var renderController = function () {
 		}
 	};
 	
-	let init = (containerId, bottomCards, topCards, boardCards) => {
+	let addBoardTiles = (container, tiles) => {
+		let classes = tiles[0] === 1 ? ["tile", "tile-rock"] : ["tile"];
+		container.appendChild(createElement("div", classes));
+		if (tiles.length > 1) {
+			addBoardTiles(container, tiles.slice(1));
+		}
+	};
+	
+	let init = (containerId, state) => {
 		game = document.querySelector(`#${containerId}`);
 		game.classList.add("game");
 		topHand = createElement("div", ["hand"]);
 		game.appendChild(topHand);
-		addTiles(topHand, 5);		
+		addTiles(topHand, 5);
 		board = createElement("div", ["board"]);
 		game.appendChild(board);
-		addTiles(board, 16);		
+		addBoardTiles(board, state.board);
 		bottomHand = createElement("div", ["hand"]);
 		game.appendChild(bottomHand);
 		addTiles(bottomHand, 5);		
 		
 		let cards = createElement("div", ["cards"]);
 		game.appendChild(cards);
-		bottomCards.forEach(card => cards.appendChild(createElement("div", ["card", "card-blue"], card.id)));
-		topCards.forEach(card => cards.appendChild(createElement("div", ["card", "card-red"], card.id)));
+		state.cards.forEach(card => cards.appendChild(createElement("div", ["card", "card-blue"], card.id)));
+		state.primaryDeck.forEach(card => cards.appendChild(createElement("div", ["card", "card-blue"], card.id)));
 		
-		updateBoard(bottomCards, topCards, boardCards);
+		updateBoard(state.primaryDeck, state.opponentPrimaryDeckSize, state.board, state.cards);
 	};
 	
 	return { init, updateBoard, updateBoardCard };
@@ -103,51 +115,32 @@ var renderController = function () {
 
 var gameController = function () {
 	let renderer = renderController();
-	let handCards = [];
-	let opponentCards = [];
-	let boardCards = [];		
+	let state = null;
 	
-	let moveTo = (id, pos, isPlayer) => {
-		let hand = isPlayer ? handCards : opponentCards;
-		let i = hand.findIndex(c => c && c.id === id);
-		
-		if (i >= 0) {
-			boardCards.push({ id: hand[i].id, pos });
-			hand[i] = null;
-			
-			renderer.updateBoardCard(id, pos, true);
-		}
+	// let moveTo = (id, pos, isPlayer) => {
+	// 	let hand = isPlayer ? handCards : opponentCards;
+	// 	let i = hand.findIndex(c => c && c.id === id);
+	// 	
+	// 	if (i >= 0) {
+	// 		boardCards.push({ id: hand[i].id, pos });
+	// 		hand[i] = null;
+	// 		
+	// 		renderer.updateBoardCard(id, pos, true);
+	// 	}
+	// };
+	
+	let init = (initialState) => {
+		state = initialState;
+		renderer.init("game", initialState);
+		window.addEventListener("resize", () => renderer.updateBoard(state.primaryDeck, state.opponentPrimarDeckSize, state.board, state.cards));
 	};
 	
-	let init = (p1Cards, p2Cards) => {
-		handCards = p1Cards;
-		opponentCards = p2Cards;
-		renderer.init("game", p1Cards, p2Cards, boardCards);
-		window.addEventListener("resize", () => renderer.updateBoard(handCards, opponentCards, boardCards));
-	};
-	
-	return { init, moveTo };
+	return { init };
 }();
 
 // TEST DATA AND INIT
 
-var p1Cards = [
-	{ id: "p1c1" },
-	{ id: "p1c2" },
-	{ id: "p1c3" },
-	{ id: "p1c4" },
-	{ id: "p1c5" }
-];
-
-var p2Cards  = [
-	{ id: "p2c1" },
-	{ id: "p2c2" },
-	{ id: "p2c3" },
-	{ id: "p2c4" },
-	{ id: "p2c5" }
-];
-
-let testData = {
+var testState = {
     "players": [
         {
             "id": "tw-123",
@@ -288,4 +281,4 @@ let testData = {
     "opponentPrimaryDeckSize": 3
 };
 
-gameController.init(p1Cards, p2Cards);
+var runTest = () => gameController.init(testState);
