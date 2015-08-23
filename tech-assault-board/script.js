@@ -65,6 +65,25 @@ var renderController = function () {
 		}
 	};
 	
+	let setCardColour = (id, colour, transition) => {
+		let card = document.querySelector(`[id='${id}'`);
+		
+		if (transition) {
+			card.style.transitionDuration = "0.5s";
+		}
+		
+		card.classList.remove("card-red");
+		card.classList.remove("card-blue");
+		card.classList.add(`card-${colour}`);
+		setTimeout(() => card.style.transitionDuration = "", 500);
+	};
+	
+	let runCardBattleAnimation = (id, direction) => {
+		let card = document.querySelector(`[id='${id}'`);
+		card.classList.add(`animate-attack-${direction}`);
+		
+	};
+	
 	let createElement = (type, classes = [], id = null) => {
 		let el = document.createElement(type);
 		if (id) {
@@ -104,30 +123,38 @@ var renderController = function () {
 		
 		let cards = createElement("div", ["cards"]);
 		game.appendChild(cards);
-		state.cards.forEach(card => cards.appendChild(createElement("div", ["card", "card-blue"], card.id)));
+		state.cards.forEach(card => cards.appendChild(createElement("div", ["card", card.owner === "tw-123" ? "card-blue" : "card-red"], card.id)));
 		state.primaryDeck.forEach(card => cards.appendChild(createElement("div", ["card", "card-blue"], card.id)));
 		
 		updateBoard(state.primaryDeck, state.opponentPrimaryDeckSize, state.board, state.cards);
 	};
 	
-	return { init, updateBoard, updateBoardCard };
+	return { init, updateBoard, updateBoardCard, setCardColour, runCardBattleAnimation };
 }
 
 var gameController = function () {
 	let renderer = renderController();
 	let state = null;
 	
-	// let moveTo = (id, pos, isPlayer) => {
-	// 	let hand = isPlayer ? handCards : opponentCards;
-	// 	let i = hand.findIndex(c => c && c.id === id);
-	// 	
-	// 	if (i >= 0) {
-	// 		boardCards.push({ id: hand[i].id, pos });
-	// 		hand[i] = null;
-	// 		
-	// 		renderer.updateBoardCard(id, pos, true);
-	// 	}
-	// };
+	let runActionSequence = sequence => {
+		let action = sequence[0];
+		switch (action.type) {
+			case "cardPlaced":
+				renderer.updateBoardCard(action.cardId, action.cardPosition, true);
+				break;
+			case "battle":
+			renderer.runCardBattleAnimation(action.cardId, "bottomRight");
+				break;
+			case "takeOver":
+				renderer.setCardColour(action.cardId, action.newOwner === "tw-123" ? "blue" : "red", true);
+			default:
+				break;
+		}
+		
+		if (sequence.length > 1) {
+			setTimeout(() => runActionSequence(sequence.slice(1)), 1000);			
+		}
+	};
 	
 	let init = (initialState) => {
 		state = initialState;
@@ -135,7 +162,7 @@ var gameController = function () {
 		window.addEventListener("resize", () => renderer.updateBoard(state.primaryDeck, state.opponentPrimarDeckSize, state.board, state.cards));
 	};
 	
-	return { init };
+	return { init, runActionSequence };
 }();
 
 // TEST DATA AND INIT
@@ -168,50 +195,36 @@ var testState = {
         {
             "player": "tw-555",
             "type": "cardPlaced",
+            "cardId": "68526f18-2bd3-4e2a-ba1f-03e89a392bf8",
+            "cardPosition": 0,
+            "events": []
+        },
+        {
+            "player": "tw-123",
+            "type": "cardPlaced",
+            "cardId": "e135a246-fb51-43bc-a6da-eb228984dba2",
+            "cardPosition": 1,
+            "events": []
+        },
+        {
+            "player": "tw-123",
+            "type": "cardPlaced",
+            "cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
+            "cardPosition": 2
+        },
+		{
+            "type": "battle",
+ 			"cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
+            "opposingCardId": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
+            "opposingCardPosition": 10,
+            "cardPower": 123,
+        	"opposingCardPower": 118
+        },
+        {
+        	"type": "takeOver",
+            "newOwner": "tw-123",
             "cardId": "88679725-8b41-4e2f-9e94-063dfc41586b",
-            "cardPosition": 15,
-            "events": []
-        },
-        {
-            "player": "tw-123",
-            "type": "cardPlaced",
-            "cardId": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
-            "cardPosition": 15,
-            "events": []
-        },
-        {
-            "player": "tw-555",
-            "type": "cardPlaced",
-            "cardId": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
-            "cardPosition": 10,
-            "events": []
-        },
-        {
-            "player": "tw-123",
-            "type": "cardPlaced",
-            "cardId": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
-            "cardPosition": 5,
-            "events": [
-                {
-                    "type": "battle",
-                    "opposingCardId": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
-                    "opposingCardPosition": 10,
-                    "cardPower": 123,
-                    "opposingCardPower": 118
-                },
-                {
-                    "type": "takeOver",
-                    "newOwner": "tw-123",
-                    "cardId": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
-                    "cardPosition": 10
-                },
-                {
-                    "type": "takeOver",
-                    "newOwner": "tw-123",
-                    "cardId": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
-                    "cardPosition": 15
-                }
-            ]
+            "cardPosition": 10
         }
     ],
     "cards": [
@@ -228,7 +241,7 @@ var testState = {
             "id": "88679725-8b41-4e2f-9e94-063dfc41586b",
             "name": "Azure",
             "image": "url",
-            "owner": "tw-123",
+            "owner": "tw-555",
             "attack": 2,
             "defense": 3,
             "arrows": [0, 0, 0, 0, 0, 0, 1, 1]
@@ -246,7 +259,7 @@ var testState = {
             "id": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
             "name": "PHP",
             "image": "url",
-            "owner": "tw-123",
+            "owner": "tw-555",
             "attack": 1,
             "defense": 0,
             "arrows": [0, 0, 1, 0, 0, 0, 0, 0]
