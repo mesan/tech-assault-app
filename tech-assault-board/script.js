@@ -90,12 +90,16 @@ var renderController = function () {
 		setTimeout(() => card.classList.remove(`animate-attack-${direction}`), 1000);
 	};
 	
-	let createElement = (type, classes = [], id = null) => {
+	let createElement = (type, classes = []) => {
 		let el = document.createElement(type);
-		if (id) {
-			el.id = id;
-		}		
 		classes.forEach(c => el.classList.add(c));
+		return el;
+	};
+	
+	let createCard = card => {
+		let el = createElement("div", ["card", card.owner === "tw-123" ? "card-blue" : "card-red"]);
+		el.id = card.id;
+		el.style.backgroundImage = `url(${card.image})`;
 		return el;
 	};
 	
@@ -129,8 +133,8 @@ var renderController = function () {
 		
 		let cards = createElement("div", ["cards"]);
 		game.appendChild(cards);
-		state.cards.forEach(card => cards.appendChild(createElement("div", ["card", card.owner === "tw-123" ? "card-blue" : "card-red"], card.id)));
-		state.primaryDeck.forEach(card => cards.appendChild(createElement("div", ["card", "card-blue"], card.id)));
+		state.cards.forEach(card => cards.appendChild(createCard(card)));
+		state.primaryDeck.forEach(card => cards.appendChild(createCard(card)));
 		
 		updateBoard(state.primaryDeck, state.opponentPrimaryDeckSize, state.board, state.cards);
 	};
@@ -231,15 +235,15 @@ var testState = {
         },
         {
         	"type": "takeOver",
-            "newOwner": "tw-123",
-            "cardId": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b"
+            "newOwner": "tw-555",
+            "cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb"
         }
     ],
     "cards": [
         {
             "id": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
             "name": "C#",
-            "image": "url",
+            "image": "http://xamarin.com/content/images/pages/platform/visual-studio-icon.svg",
             "owner": "tw-555",
             "attack": 2,
             "defense": 1,
@@ -248,7 +252,7 @@ var testState = {
         {
             "id": "88679725-8b41-4e2f-9e94-063dfc41586b",
             "name": "Azure",
-            "image": "url",
+            "image": "https://www.draw.io/images/onedrive-logo.svg",
             "owner": "tw-555",
             "attack": 2,
             "defense": 3,
@@ -257,7 +261,7 @@ var testState = {
         {
             "id": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
             "name": "Python",
-            "image": "url",
+            "image": "https://www.b2b-alive.com/wp-content/uploads/python-logo.svg",
             "owner": "tw-123",
             "attack": 3,
             "defense": 2,
@@ -266,7 +270,7 @@ var testState = {
         {
             "id": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
             "name": "PHP",
-            "image": "url",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg",
             "owner": "tw-555",
             "attack": 1,
             "defense": 0,
@@ -277,24 +281,27 @@ var testState = {
         {
             "id": "68526f18-2bd3-4e2a-ba1f-03e89a392bf8",
             "name": "Ruby on Rails",
-            "image": "url",
-            "attack": 1,
+            "image": "https://upload.wikimedia.org/wikipedia/en/e/e9/Ruby_on_Rails.svg",
+            "owner": "tw-123",
+			"attack": 1,
             "defense": 2,
             "arrows": [1, 0, 0, 0, 1, 1, 0, 0]
         },
         {
             "id": "e135a246-fb51-43bc-a6da-eb228984dba2",
             "name": "Ruby on Rails",
-            "image": "url",
-            "attack": 1,
+            "image": "https://upload.wikimedia.org/wikipedia/en/e/e9/Ruby_on_Rails.svg",
+            "owner": "tw-123",
+			"attack": 1,
             "defense": 2,
             "arrows": [1, 0, 0, 0, 1, 1, 0, 0]
         },
         {
             "id": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
             "name": "Heroku",
-            "image": "url",
-            "attack": 3,
+            "image": "http://portfolio.hugoschotman.com/assets/heroku-logo-af398e95119248c4198b38689efabb80.svg",
+            "owner": "tw-123",
+			"attack": 3,
             "defense": 0,
             "arrows": [0, 0, 1, 0, 0, 1, 0, 0]
         }

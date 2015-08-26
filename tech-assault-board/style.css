@@ -45,6 +45,9 @@ html, body {
 	position: absolute;
 	transition: all 0s ease-in-out;
 	border: thin solid white;
+  background-position: center;
+  background-size: 75%;
+  background-repeat: no-repeat;
 }
 
 .card-red {
