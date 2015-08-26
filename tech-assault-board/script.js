@@ -78,10 +78,16 @@ var renderController = function () {
 		setTimeout(() => card.style.transitionDuration = "", 500);
 	};
 	
-	let runCardBattleAnimation = (id, direction) => {
+	let animateFight = (id, cardPosition, opposingCardPosition) => {
+		let directions = [["topLeft", "top", "topRight",],
+						  ["left", null, "right",],
+						  ["bottomLeft", "bottom", "bottomRight"]];
 		let card = document.querySelector(`[id='${id}'`);
-		card.classList.add(`animate-attack-${direction}`);
 		
+		let direction = directions[1 + Math.floor(opposingCardPosition/4) - Math.floor(cardPosition/boardSize)][Math.abs((cardPosition%boardSize) - (opposingCardPosition%boardSize) - 1)];
+		
+		card.classList.add(`animate-attack-${direction}`);
+		setTimeout(() => card.classList.remove(`animate-attack-${direction}`), 1000);
 	};
 	
 	let createElement = (type, classes = [], id = null) => {
@@ -129,7 +135,7 @@ var renderController = function () {
 		updateBoard(state.primaryDeck, state.opponentPrimaryDeckSize, state.board, state.cards);
 	};
 	
-	return { init, updateBoard, updateBoardCard, setCardColour, runCardBattleAnimation };
+	return { init, updateBoard, updateBoardCard, setCardColour, animateFight };
 }
 
 var gameController = function () {
@@ -138,21 +144,23 @@ var gameController = function () {
 	
 	let runActionSequence = sequence => {
 		let action = sequence[0];
+		let actionTime = 500;
 		switch (action.type) {
 			case "cardPlaced":
 				renderer.updateBoardCard(action.cardId, action.cardPosition, true);
 				break;
 			case "battle":
-			renderer.runCardBattleAnimation(action.cardId, "bottomRight");
+				renderer.animateFight(action.cardId, action.cardPosition, action.opposingCardPosition);
+				renderer.animateFight(action.opposingCardId, action.opposingCardPosition, action.cardPosition);
+				actionTime = 1500;
 				break;
 			case "takeOver":
 				renderer.setCardColour(action.cardId, action.newOwner === "tw-123" ? "blue" : "red", true);
 			default:
 				break;
 		}
-		
 		if (sequence.length > 1) {
-			setTimeout(() => runActionSequence(sequence.slice(1)), 1000);			
+			setTimeout(() => runActionSequence(sequence.slice(1)), actionTime);			
 		}
 	};
 	
@@ -193,20 +201,6 @@ var testState = {
     "nextTurn": "tw-555",
     "actions": [
         {
-            "player": "tw-555",
-            "type": "cardPlaced",
-            "cardId": "68526f18-2bd3-4e2a-ba1f-03e89a392bf8",
-            "cardPosition": 0,
-            "events": []
-        },
-        {
-            "player": "tw-123",
-            "type": "cardPlaced",
-            "cardId": "e135a246-fb51-43bc-a6da-eb228984dba2",
-            "cardPosition": 1,
-            "events": []
-        },
-        {
             "player": "tw-123",
             "type": "cardPlaced",
             "cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
@@ -215,16 +209,30 @@ var testState = {
 		{
             "type": "battle",
  			"cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
-            "opposingCardId": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
-            "opposingCardPosition": 10,
+			"cardPosition": 2,
+            "opposingCardId": "88679725-8b41-4e2f-9e94-063dfc41586b",
+            "opposingCardPosition": 7,
             "cardPower": 123,
         	"opposingCardPower": 118
         },
         {
         	"type": "takeOver",
             "newOwner": "tw-123",
-            "cardId": "88679725-8b41-4e2f-9e94-063dfc41586b",
-            "cardPosition": 10
+            "cardId": "88679725-8b41-4e2f-9e94-063dfc41586b"
+        },
+		{
+            "type": "battle",
+ 			"cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
+			"cardPosition": 2,
+            "opposingCardId": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
+            "opposingCardPosition": 5,
+            "cardPower": 123,
+        	"opposingCardPower": 118
+        },
+        {
+        	"type": "takeOver",
+            "newOwner": "tw-123",
+            "cardId": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b"
         }
     ],
     "cards": [
@@ -232,7 +240,7 @@ var testState = {
             "id": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
             "name": "C#",
             "image": "url",
-            "owner": "tw-123",
+            "owner": "tw-555",
             "attack": 2,
             "defense": 1,
             "arrows": [0, 0, 0, 1, 0, 0, 0, 0]
@@ -294,4 +302,8 @@ var testState = {
     "opponentPrimaryDeckSize": 3
 };
 
-var runTest = () => gameController.init(testState);
+var runTest = () => {
+	gameController.init(testState);
+	gameController.runActionSequence(testState.actions);
+};
+runTest();
