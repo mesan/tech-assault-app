@@ -21,12 +21,23 @@ export default class Home extends React.Component {
     goToHighscores() {
         this.props.changeCurrentPage('highscore');
     }
+    
+    goToEnlistPage() {
+        this.props.changeCurrentPage('enlist');
+    }
 	
 	render() {
         const buttons = [
-            { key: 'battle', title: 'Play now', clickHandler: this.goToHome.bind(this) },
-            { key: 'highscore', title: 'High Scores', clickHandler: this.goToHighscores.bind(this) }
+            { key: 'enlist', title: 'Play', clickHandler: this.goToEnlistPage.bind(this) },
+            { key: 'highscore', title: 'High Scores', clickHandler: this.goToHighscores.bind(this) },
         ];
+
+        const { user } = this.props;
+
+        console.log(user);
+      
+        const userName = user && user.name ? user.name : 'Gjest';
+        const userAvatar = user && user.avatar ? user.avatar.large : 'http://gjesteurl';
         
         const buttonElements = buttons.map(({ clickHandler, title, key }) => {
             return <button key={key} onClick={clickHandler} >{title}</button>;
@@ -35,7 +46,8 @@ export default class Home extends React.Component {
 		return (
 			<section className="page-home">
 				<h1>Home</h1>
-				<p>Welcome, {this.props.userToken}</p>
+				<p>Welcome, {userName}</p>
+                <img src={userAvatar} />
 				<div className="buttons">
 					{buttonElements}
 				</div>

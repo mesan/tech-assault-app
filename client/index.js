@@ -7,16 +7,22 @@ import App from './modules/app/App';
 import Home from './modules/home/Home';
 import Login from './modules/login/Login';
 import Highscore from './modules/highscore/Highscore';
+import Battle from './modules/battle/Battle';
+import Enlist from './modules/enlist/Enlist';
 
 require('./modules/app/app.less');
 
 const modules = {
     'home': Home,
     'login': Login,
-    'highscore': Highscore
+    'highscore': Highscore,
+    'battle' : Battle,
+    'enlist' : Enlist
 };
 
-React.render(<App modules={modules} userToken={getUserToken()}/>, document.getElementById('app'));
+const socket = io();
+
+React.render(<App socket={socket} modules={modules} userToken={getUserToken()} />, document.getElementById('app'));
 
 // Server events.
 import eventHandlers from './eventHandlers';

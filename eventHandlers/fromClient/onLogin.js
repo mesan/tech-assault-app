@@ -8,7 +8,7 @@ export default function onLogin(userToken) {
     const { tokenSocketMap, matchMap } = this.server;
 
     let user;
-
+    
     requestUserByToken(userToken)
         .then((userByToken) => {
             user = userByToken;
