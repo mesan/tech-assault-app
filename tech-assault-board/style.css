@@ -96,7 +96,7 @@ html, body {
   }
   to {
     transform: translate(0, -25%) scale(1.2);
-	box-shadow: 0px 0px 15px 5px #E3C800;
+	 box-shadow: 0px 0px 15px 5px #E3C800;
   }
 }
 
@@ -106,7 +106,7 @@ html, body {
   }
   to {
     transform: translate(25%, -25%) scale(1.2);
-	box-shadow: 0px 0px 15px 5px #E3C800;
+	 box-shadow: 0px 0px 15px 5px #E3C800;
   }
 }
 
@@ -116,7 +116,7 @@ html, body {
   }
   to {
     transform: translate(25%, 0) scale(1.2);
-	box-shadow: 0px 0px 15px 5px #E3C800;
+    box-shadow: 0px 0px 15px 5px #E3C800;
   }
 }
 
@@ -126,7 +126,7 @@ html, body {
   }
   to {
     transform: translate(25%, 25%) scale(1.2);
-	box-shadow: 0px 0px 15px 5px #E3C800;
+    box-shadow: 0px 0px 15px 5px #E3C800;
   }
 }
 
@@ -136,7 +136,7 @@ html, body {
   }
   to {
     transform: translate(0, 25%) scale(1.2);
-	box-shadow: 0px 0px 15px 5px #E3C800;
+	  box-shadow: 0px 0px 15px 5px #E3C800;
   }
 }
 
@@ -146,7 +146,7 @@ html, body {
   }
   to {
     transform: translate(-25%, 25%) scale(1.2);
-	box-shadow: 0px 0px 15px 5px #E3C800;
+	  box-shadow: 0px 0px 15px 5px #E3C800;
   }
 }
 
@@ -156,7 +156,7 @@ html, body {
   }
   to {
     transform: translate(-25%, 0) scale(1.2);
-	box-shadow: 0px 0px 15px 5px #E3C800;
+    box-shadow: 0px 0px 15px 5px #E3C800;
   }
 }
 
@@ -166,7 +166,7 @@ html, body {
   }
   to {
     transform: translate(-25%, -25%) scale(1.2);
-	box-shadow: 0px 0px 15px 5px #E3C800;
+    box-shadow: 0px 0px 15px 5px #E3C800;
   }
 }
 
