@@ -1,17 +1,35 @@
 import io from 'socket.io-client';
 import getUserToken from './util/getUserToken';
 import Events from '../constants/Events';
+import React from 'react';
+
+import App from './modules/app/App';
+import Home from './modules/home/Home';
+import Login from './modules/login/Login';
+import Highscore from './modules/highscore/Highscore';
+
+require('./modules/app/app.less');
+
+const modules = {
+    'home': Home,
+    'login': Login,
+    'highscore': Highscore
+};
+
+React.render(<App modules={modules} userToken={getUserToken()}/>, document.getElementById('app'));
 
 // Server events.
 import eventHandlers from './eventHandlers';
 
 (function () {
 
-    const userToken = getUserToken();
+    /*const userToken = getUserToken();
 
     if (!userToken) {
-        return;
+        return; // render login skjerm
     }
+    
+    // Render riktig side fra socketen.
 
     const socket = io();
 
@@ -39,4 +57,6 @@ import eventHandlers from './eventHandlers';
                 cardPosition: parseInt(document.getElementById('cardpos').value)
             });
     });
+        socket.emit(Events.opponentEnlisted);
+    });*/
 })();

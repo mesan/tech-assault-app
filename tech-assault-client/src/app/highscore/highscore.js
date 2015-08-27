@@ -9,7 +9,7 @@ let highscoreController = function() {
     { name : 'Bjarne', score : 20},
     { name : 'Nils', score : 18},
     { name : 'Bjrate', score : 12},
-    { name : 'Gaute', score : 9}
+    { name : 'Bjarte', score : 9}
   ];
 
 };

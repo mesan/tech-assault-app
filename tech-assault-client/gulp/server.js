@@ -22,7 +22,12 @@ module.exports = function(options) {
 
     var server = {
       baseDir: baseDir,
-      routes: routes
+      routes: routes,
+      port: 3001,
+      proxy: {
+        target: 'http://localhost:3000',
+        ws: true
+      }
     };
 
     if(middleware.length > 0) {
