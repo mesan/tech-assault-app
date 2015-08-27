@@ -88,7 +88,7 @@ var renderController = function () {
 		let direction = directions[1 + Math.floor(opposingCardPosition/4) - Math.floor(cardPosition/boardSize)][Math.abs((cardPosition%boardSize) - (opposingCardPosition%boardSize) - 1)];
 		
 		card.classList.add(`animate-attack-${direction}`);
-		setTimeout(() => card.classList.remove(`animate-attack-${direction}`), 1000);
+		setTimeout(() => card.classList.remove(`animate-attack-${direction}`), 1500);
 	};
 	
 	let createElement = (type, classes = []) => {
