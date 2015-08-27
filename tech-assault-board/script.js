@@ -33,7 +33,7 @@ var renderController = function () {
 		card.style.left = `${(board.offsetWidth / 5) * i}px`;
 	}
 	
-	let updateBoard = (playerCards, opponentCardCount, tiles, cards) => {
+	let updateBoard = (playerCards, opponentCards, tiles, cards) => {
 		let gHeight = game.offsetHeight;
 		let gWidth = game.offsetWidth;
 		let bHeight = 0;
@@ -57,7 +57,8 @@ var renderController = function () {
 		bottomHand.style.height = `${bWidth / 5}px`;
 		
 		playerCards.forEach(c => updateHandCard(c.id, playerCards, true));
-		// topCards.filter(c => c !== null).forEach(c => updateHandCard(c.id, topCards, false));
+		opponentCards.filter(c => c !== null).forEach(c => updateHandCard(c.id, opponentCards, false));
+		
 		for (var i = 0; i < tiles.length; i++) {
 			if (typeof tiles[i] === "string") {
 				updateBoardCard(tiles[i], i);
@@ -65,16 +66,16 @@ var renderController = function () {
 		}
 	};
 	
-	let setCardColour = (id, colour, transition) => {
+	let setCardOwner = (id, owner, transition) => {
 		let card = document.querySelector(`[id='${id}'`);
 		
 		if (transition) {
 			card.style.transitionDuration = "0.5s";
 		}
 		
-		card.classList.remove("card-red");
-		card.classList.remove("card-blue");
-		card.classList.add(`card-${colour}`);
+		card.classList.remove("card-opponent");
+		card.classList.remove("card-player");
+		card.classList.add(`card-${owner}`);
 		setTimeout(() => card.style.transitionDuration = "", 500);
 	};
 	
@@ -97,9 +98,11 @@ var renderController = function () {
 	};
 	
 	let createCard = card => {
-		let el = createElement("div", ["card", card.owner === "tw-123" ? "card-blue" : "card-red"]);
+		let el = createElement("div", ["card", card.isPlayerOwned ? "card-player" : "card-opponent"]);
 		el.id = card.id;
-		el.style.backgroundImage = `url(${card.image})`;
+		if (card.image) {
+			el.style.backgroundImage = `url(${card.image})`;
+		}
 		return el;
 	};
 	
@@ -135,11 +138,12 @@ var renderController = function () {
 		game.appendChild(cards);
 		state.cards.forEach(card => cards.appendChild(createCard(card)));
 		state.primaryDeck.forEach(card => cards.appendChild(createCard(card)));
+		state.opponentPrimaryDeck.forEach(card => cards.appendChild(createCard(card)));
 		
-		updateBoard(state.primaryDeck, state.opponentPrimaryDeckSize, state.board, state.cards);
+		updateBoard(state.primaryDeck, state.opponentPrimaryDeck, state.board, state.cards);
 	};
 	
-	return { init, updateBoard, updateBoardCard, setCardColour, animateFight };
+	return { init, updateBoard, updateBoardCard, setCardOwner, animateFight };
 }
 
 var gameController = function () {
@@ -159,7 +163,7 @@ var gameController = function () {
 				actionTime = 1500;
 				break;
 			case "takeOver":
-				renderer.setCardColour(action.cardId, action.newOwner === "tw-123" ? "blue" : "red", true);
+				renderer.setCardOwner(action.cardId, action.isPlayerOwned ? "player" : "opponent", true);
 			default:
 				break;
 		}
@@ -168,13 +172,18 @@ var gameController = function () {
 		}
 	};
 	
-	let init = (initialState) => {
+	let init = initialState => {
 		state = initialState;
 		renderer.init("game", initialState);
-		window.addEventListener("resize", () => renderer.updateBoard(state.primaryDeck, state.opponentPrimarDeckSize, state.board, state.cards));
+		window.addEventListener("resize", () => renderer.updateBoard(state.primaryDeck, state.opponentPrimaryDeck, state.board, state.cards));
 	};
 	
-	return { init, runActionSequence };
+	let updateState = newState => {
+		state = newState;
+		runActionSequence(newState.actions);
+	};
+	
+	return { init, updateState };
 }();
 
 // TEST DATA AND INIT
@@ -182,14 +191,14 @@ var gameController = function () {
 var testState = {
     "players": [
         {
-            "id": "tw-123",
             "name": "Arild Tvergrov",
-            "avatar": "http://url"
+            "avatar": "http://url",
+			"score": 4
         },
         {
-            "id": "tw-555",
             "name": "John Doe",
-            "avatar": "http://url"
+            "avatar": "http://url",
+			"score": 2
         }
     ],
     "board": [
@@ -198,14 +207,10 @@ var testState = {
         1, 1, "2a5f316e-b55f-4c3d-866b-2c27737b5cd5", 0,
         0, 0, 0, "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6"
     ],
-    "score": [
-        4,
-        0
-    ],
-    "nextTurn": "tw-555",
+    "isPlayerTurn": false,
     "actions": [
         {
-            "player": "tw-123",
+            "isPlayerOwned": true,
             "type": "cardPlaced",
             "cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
             "cardPosition": 2
@@ -215,13 +220,11 @@ var testState = {
  			"cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
 			"cardPosition": 2,
             "opposingCardId": "88679725-8b41-4e2f-9e94-063dfc41586b",
-            "opposingCardPosition": 7,
-            "cardPower": 123,
-        	"opposingCardPower": 118
+            "opposingCardPosition": 7
         },
         {
         	"type": "takeOver",
-            "newOwner": "tw-123",
+            "isPlayerOwned": true,
             "cardId": "88679725-8b41-4e2f-9e94-063dfc41586b"
         },
 		{
@@ -229,88 +232,62 @@ var testState = {
  			"cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
 			"cardPosition": 2,
             "opposingCardId": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
-            "opposingCardPosition": 5,
-            "cardPower": 123,
-        	"opposingCardPower": 118
+            "opposingCardPosition": 5
         },
         {
         	"type": "takeOver",
-            "newOwner": "tw-555",
+            "isPlayerOwned": false,
             "cardId": "fd1b4b7a-3278-4796-a620-2932a3edb0fb"
         }
     ],
     "cards": [
         {
             "id": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
-            "name": "C#",
             "image": "http://xamarin.com/content/images/pages/platform/visual-studio-icon.svg",
-            "owner": "tw-555",
-            "attack": 2,
-            "defense": 1,
-            "arrows": [0, 0, 0, 1, 0, 0, 0, 0]
+            "isPlayerOwned": false
         },
         {
             "id": "88679725-8b41-4e2f-9e94-063dfc41586b",
-            "name": "Azure",
             "image": "https://www.draw.io/images/onedrive-logo.svg",
-            "owner": "tw-555",
-            "attack": 2,
-            "defense": 3,
-            "arrows": [0, 0, 0, 0, 0, 0, 1, 1]
+            "isPlayerOwned": false
         },
         {
             "id": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
-            "name": "Python",
             "image": "https://www.b2b-alive.com/wp-content/uploads/python-logo.svg",
-            "owner": "tw-123",
-            "attack": 3,
-            "defense": 2,
-            "arrows": [0, 0, 0, 1, 0, 0, 0, 1]
+            "isPlayerOwned": true
         },
         {
             "id": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
-            "name": "PHP",
             "image": "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg",
-            "owner": "tw-555",
-            "attack": 1,
-            "defense": 0,
-            "arrows": [0, 0, 1, 0, 0, 0, 0, 0]
+            "isPlayerOwned": false
         }
     ],
     "primaryDeck": [
         {
             "id": "68526f18-2bd3-4e2a-ba1f-03e89a392bf8",
-            "name": "Ruby on Rails",
             "image": "https://upload.wikimedia.org/wikipedia/en/e/e9/Ruby_on_Rails.svg",
-            "owner": "tw-123",
-			"attack": 1,
-            "defense": 2,
-            "arrows": [1, 0, 0, 0, 1, 1, 0, 0]
+            "isPlayerOwned": true
         },
         {
             "id": "e135a246-fb51-43bc-a6da-eb228984dba2",
-            "name": "Ruby on Rails",
             "image": "https://upload.wikimedia.org/wikipedia/en/e/e9/Ruby_on_Rails.svg",
-            "owner": "tw-123",
-			"attack": 1,
-            "defense": 2,
-            "arrows": [1, 0, 0, 0, 1, 1, 0, 0]
+            "isPlayerOwned": true
         },
         {
             "id": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
-            "name": "Heroku",
             "image": "http://portfolio.hugoschotman.com/assets/heroku-logo-af398e95119248c4198b38689efabb80.svg",
-            "owner": "tw-123",
-			"attack": 3,
-            "defense": 0,
-            "arrows": [0, 0, 1, 0, 0, 1, 0, 0]
-        }
+            "isPlayerOwned": true
+        },
     ],
-    "opponentPrimaryDeckSize": 3
+	"opponentPrimaryDeck": [
+        {
+            "id": "4b5bfbda-4814-427e-86f1-85f7b3acd41e"
+        }
+    ]
 };
 
 var runTest = () => {
 	gameController.init(testState);
-	gameController.runActionSequence(testState.actions);
+	gameController.updateState(testState);
 };
 runTest();

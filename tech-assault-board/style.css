@@ -33,7 +33,7 @@ html, body {
 }
 
 .tile-rock {
-	background-color: #647587;
+	background-color: #999999;
 }
 
 .hand > .tile {
@@ -46,16 +46,16 @@ html, body {
 	transition: all 0s ease-in-out;
 	border: thin solid white;
   background-position: center;
-  background-size: 75%;
+  background-size: 50%;
   background-repeat: no-repeat;
 }
 
-.card-red {
-	background-color: #E54100;
+.card-opponent {
+	background-color: #E56A39;
 }
 
-.card-blue {
-	background-color: #0050EF;
+.card-player {
+	background-color: #3C78EF;
 }
 
 .animate-attack-top {
