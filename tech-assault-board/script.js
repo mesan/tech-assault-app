@@ -114,7 +114,7 @@ var renderController = function () {
 	};
 	
 	let addBoardTiles = (container, tiles) => {
-		let classes = tiles[0] === 1 ? ["tile", "tile-rock"] : ["tile"];
+		let classes = tiles[0] === 1 ? ["tile", "tile-hidden"] : ["tile"];
 		container.appendChild(createElement("div", classes));
 		if (tiles.length > 1) {
 			addBoardTiles(container, tiles.slice(1));
@@ -243,39 +243,39 @@ var testState = {
     "cards": [
         {
             "id": "3cf8cc21-0bdc-48c0-9674-019232cb3c2b",
-            "image": "http://xamarin.com/content/images/pages/platform/visual-studio-icon.svg",
+            "image": "assets/python.png",
             "isPlayerOwned": false
         },
         {
             "id": "88679725-8b41-4e2f-9e94-063dfc41586b",
-            "image": "https://www.draw.io/images/onedrive-logo.svg",
+            "image": "assets/java.png",
             "isPlayerOwned": false
         },
         {
             "id": "2a5f316e-b55f-4c3d-866b-2c27737b5cd5",
-            "image": "https://www.b2b-alive.com/wp-content/uploads/python-logo.svg",
+            "image": "assets/apple.png",
             "isPlayerOwned": true
         },
         {
             "id": "8a4ea8d0-3ddc-4005-adf5-f4a9bdadb7b6",
-            "image": "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg",
+            "image": "assets/mesan.png",
             "isPlayerOwned": false
         }
     ],
     "primaryDeck": [
         {
             "id": "68526f18-2bd3-4e2a-ba1f-03e89a392bf8",
-            "image": "https://upload.wikimedia.org/wikipedia/en/e/e9/Ruby_on_Rails.svg",
+            "image": "assets/windows.png",
             "isPlayerOwned": true
         },
         {
             "id": "e135a246-fb51-43bc-a6da-eb228984dba2",
-            "image": "https://upload.wikimedia.org/wikipedia/en/e/e9/Ruby_on_Rails.svg",
+            "image": "assets/mesan.png",
             "isPlayerOwned": true
         },
         {
             "id": "fd1b4b7a-3278-4796-a620-2932a3edb0fb",
-            "image": "http://portfolio.hugoschotman.com/assets/heroku-logo-af398e95119248c4198b38689efabb80.svg",
+            "image": "assets/android.png",
             "isPlayerOwned": true
         },
     ],

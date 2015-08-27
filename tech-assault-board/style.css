@@ -6,6 +6,7 @@ html, body {
 	width: 100%;
 	height: 100%;
 	margin: 0;
+  background-color: #D8D8D8;
 }
 
 .game {
@@ -26,36 +27,37 @@ html, body {
 
 .tile {
 	float: left;
-	border: thin solid white;
-	background-color: #F0F0F0;
+	border: thin solid #D8D8D8;
+	background-color: #FFFFFF;
 	width: 25%;
 	height: 25%;
 }
 
-.tile-rock {
-	background-color: #999999;
+.tile-hidden {
+  visibility: hidden;
 }
 
 .hand > .tile {
 	width: 20%;
 	height: 100%;
+  visibility: hidden;
 }
 
 .card {
 	position: absolute;
 	transition: all 0s ease-in-out;
-	border: thin solid white;
+	border: thin solid #D8D8D8;
   background-position: center;
-  background-size: 50%;
+  background-size: 100%;
   background-repeat: no-repeat;
 }
 
 .card-opponent {
-	background-color: #E56A39;
+	background-color: #2B5D8B;
 }
 
 .card-player {
-	background-color: #3C78EF;
+	background-color: #B62A30;
 }
 
 .animate-attack-top {
