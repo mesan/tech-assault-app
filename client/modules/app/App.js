@@ -6,7 +6,7 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         
-        const currentPageId = 'home';
+        const currentPageId = 'splash';
         const user = {};
 
         this.state = { currentPageId, user };
@@ -29,10 +29,10 @@ export default class App extends React.Component {
             console.log('loginrefused', reason);
             this.changeCurrentPage('login');
         }.bind(this));
-        
-        /*socket.on(Events.matchStarted, (gameObject) => {
+
+        socket.on(Events.matchStarted, (gameObject) => {
             this.changeCurrentPage('battle');
-        }.bind(this));*/
+        }.bind(this));
     }
     
     componentWillUnmount() { }
@@ -53,24 +53,30 @@ export default class App extends React.Component {
         
     enlist() {
         const { socket } = this.props;
-        
-        socket.on(Events.matchStarted, (gameObject) => {
-            this.changeCurrentPage('battle');
-            console.log(gameObject)
-        }.bind(this));
+
+        console.log('enlist');
+
+        socket.emit(Events.playerEnlisted);
     }
 
     render() {
         const currentPage = this.props.modules[this.state.currentPageId];
         const { user } = this.state;
         const enlist = this.enlist.bind(this);
+
+        const pageProps = {
+            user,
+            enlist,
+            changeCurrentPage: this.changeCurrentPage.bind(this),
+            userToken: this.props.userToken
+        };
         
         return (
             <div>
                 <h1>
                     <a href="" onClick={this.goToHome.bind(this)}>TechAssault</a>
                 </h1>
-                {React.createElement(currentPage, { user, enlist, changeCurrentPage: this.changeCurrentPage.bind(this), userToken: this.props.userToken })}
+                {React.createElement(currentPage, pageProps)}
             </div>
         );
     }

@@ -9,23 +9,28 @@ import Login from './modules/login/Login';
 import Highscore from './modules/highscore/Highscore';
 import Battle from './modules/battle/Battle';
 import Enlist from './modules/enlist/Enlist';
+import Splash from './modules/splash/Splash';
 
 require('./modules/app/app.less');
 
 const modules = {
-    'home': Home,
-    'login': Login,
-    'highscore': Highscore,
-    'battle' : Battle,
-    'enlist' : Enlist
+    home: Home,
+    login: Login,
+    highscore: Highscore,
+    battle: Battle,
+    enlist: Enlist,
+    splash: Splash
 };
 
 const socket = io();
 
 React.render(<App socket={socket} modules={modules} userToken={getUserToken()} />, document.getElementById('app'));
 
+socket.on(Events.userUnauthorized, (arg) => {
+    console.log(arg);
+});
 // Server events.
-import eventHandlers from './eventHandlers';
+//import eventHandlers from './eventHandlers';
 
 (function () {
 

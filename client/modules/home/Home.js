@@ -34,8 +34,6 @@ export default class Home extends React.Component {
 
         const { user } = this.props;
 
-        console.log(user);
-      
         const userName = user && user.name ? user.name : 'Gjest';
         const userAvatar = user && user.avatar ? user.avatar.large : 'http://gjesteurl';
         
