@@ -1,6 +1,7 @@
 var renderController = function () {
 	const boardSize = 4;
 	let game = null;
+	let gameContainer = null;
 	let board = null;
 	let topHand = null;
 	let bottomHand = null;
@@ -48,6 +49,7 @@ var renderController = function () {
 			bWidth = bHeight;
 		}
 		
+		gameContainer.style.width = `${bWidth}px`;
 		board.style.width = `${bWidth}px`;
 		board.style.height = `${bHeight}px`;
 		
@@ -124,18 +126,20 @@ var renderController = function () {
 	let init = (containerId, state) => {
 		game = document.querySelector(`#${containerId}`);
 		game.classList.add("game");
+		gameContainer = createElement("div", ["game-container"]);
+		game.appendChild(gameContainer);
 		topHand = createElement("div", ["hand"]);
-		game.appendChild(topHand);
+		gameContainer.appendChild(topHand);
 		addTiles(topHand, 5);
 		board = createElement("div", ["board"]);
-		game.appendChild(board);
+		gameContainer.appendChild(board);
 		addBoardTiles(board, state.board);
 		bottomHand = createElement("div", ["hand"]);
-		game.appendChild(bottomHand);
+		gameContainer.appendChild(bottomHand);
 		addTiles(bottomHand, 5);		
 		
 		let cards = createElement("div", ["cards"]);
-		game.appendChild(cards);
+		gameContainer.appendChild(cards);
 		state.cards.forEach(card => cards.appendChild(createCard(card)));
 		state.primaryDeck.forEach(card => cards.appendChild(createCard(card)));
 		state.opponentPrimaryDeck.forEach(card => cards.appendChild(createCard(card)));
