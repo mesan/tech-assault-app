@@ -9,7 +9,7 @@ var renderController = function () {
 	
 	let getY = y => (board.offsetHeight / boardSize) * y + topHand.offsetHeight + 10;
 	
-	let updateBoardCard = (id, pos, transition) => {
+	let updateBoardCard = (id, pos, transition = false) => {
 		let element = document.querySelector(`[id='${id}'`);
 		
 		if (transition) {
@@ -23,7 +23,7 @@ var renderController = function () {
 		element.style.transitionDuration = "";
 	}
 	
-	let updateHandCard = (id, hand, isBottomHand) => {
+	let updateHandCard = (id, hand, isBottomHand = false) => {
 		let i = hand.findIndex(c => c && c.id === id);
 		let card = document.querySelector(`[id='${id}'`);
 		
