@@ -101,11 +101,15 @@ var renderController = function () {
 
     let createCard = card => {
         let el = createElement("div", ["card", card.isPlayerOwned ? "card-player" : "card-opponent"]);
+
         el.id = card.id;
+
         if (card.image) {
+            let arrows = createElement("div", ["arrows"]);
+            el.appendChild(arrows);
             el.style.backgroundImage = `url(${card.image}), url(assets/card-background.png)`;
-            el.style.backgroundSize = '50%, cover';
-            el.classList.add(`arrows-${card.arrows.join("")}`);
+            el.style.backgroundSize = '50%, 100%';
+            arrows.classList.add(`arrows-${parseInt(card.arrows.join(""), 2)}`);
         }
 
         return el;
@@ -181,6 +185,11 @@ var gameController = function () {
 
     let init = initialState => {
         state = initialState;
+
+        state.opponentPrimaryDeck = initialState.opponentPrimaryDeck.map(cardId => {
+            return { id: cardId, isPlayerOwned: false }
+        });
+
         renderer.init("game", initialState);
         window.addEventListener("resize", () => renderer.updateBoard(state.primaryDeck, state.opponentPrimaryDeck, state.board, state.cards));
     };
