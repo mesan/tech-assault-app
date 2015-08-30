@@ -22,27 +22,38 @@ export default function onPerformTurn(turn) {
 
             const matchesPerUser = mapToMatchesPerUser(match);
 
-            socket.emit(Events.turnPerformed, matchesPerUser[userIndex]);
+            const emits = [];
+
+            emits.push({ socket, userIndex });
 
             const userTokens = matchMap[match.matchId];
-
             const otherTokens = userTokens.filter(userToken => userToken !== token);
 
-            if (!otherTokens) {
-                console.log('No opponent to send turnPerformed event to.');
-                return;
+            if (otherTokens) {
+                const otherToken = otherTokens[0];
+                const opponentSocket = tokenSocketMap[otherToken];
+
+                if (opponentSocket) {
+                    emits.push({ socket: opponentSocket, userIndex: opponentIndex });
+                }
             }
 
-            const otherToken = otherTokens[0];
-
-            const opponentSocket = tokenSocketMap[otherToken];
-
-            if (!opponentSocket) {
-                console.log('No opponent to send turnPerformed event to.');
-                return;
+            for (let emit of emits) {
+                const { socket, userIndex } = emit;
+                socket.emit(Events.turnPerformed, matchesPerUser[userIndex]);
             }
 
-            opponentSocket.emit(Events.turnPerformed, matchesPerUser[opponentIndex]);
+            if (match.finished) {
+                for (let emit of emits) {
+                    const { socket, userIndex } = emit;
+                    socket.emit(Events.matchFinished, matchesPerUser[userIndex]);
+                }
+            }
+
+            return match;
         })
-        .catch(err => console.error(err));
+        .then(match => {
+            console.log(match.finished);
+        })
+        .catch(err => console.error(err.stack));
 }
