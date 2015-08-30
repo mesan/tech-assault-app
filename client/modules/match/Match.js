@@ -13,7 +13,7 @@ export default class Match extends React.Component {
 
 	render() {
 
-        const { users, board, primaryDeck } = this.props.match;
+        const { players, board, primaryDeck } = this.props.match;
 
         console.log(this.props.match);
 
@@ -22,7 +22,7 @@ export default class Match extends React.Component {
 		return (
 			<div>
                 <p>Battle!</p>
-                <p>{users[0].name} <strong>VS</strong> {users[1].name}</p>
+                <p>{players[0].name} <strong>VS</strong> {players[1].name}</p>
                 <p>Selected card:<br />{this.state.card}<br />Selected position:<br />{this.state.position}</p>
                 <button onClick={this.submit.bind(this)}>Perform turn</button>
                 <ul>
@@ -41,7 +41,7 @@ export default class Match extends React.Component {
     }
 
     selectPosition(event) {
-        const position = event.target.id;
+        const position = parseInt(event.target.id, 10);
         this.setState({ position });
     }
 
