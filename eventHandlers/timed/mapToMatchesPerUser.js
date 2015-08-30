@@ -55,7 +55,7 @@ export default function mapToMatchesPerUser(match) {
 
 function cardMapper(userId) {
     return ({ arrows, attack, defense, id, name, owner, image }) => {
-        const isPlayerOwned = owner === userId;
+        const isPlayerOwned = !owner || owner === userId;
 
         return { arrows, attack, defense, id, name, image, isPlayerOwned };
     };
