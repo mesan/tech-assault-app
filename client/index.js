@@ -11,6 +11,7 @@ import Match from './modules/match/Match';
 import Enlist from './modules/enlist/Enlist';
 import Splash from './modules/splash/Splash';
 
+require('babel/polyfill');
 require('./modules/app/app.less');
 
 const modules = {

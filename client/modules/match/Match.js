@@ -1,5 +1,7 @@
 import React from 'react';
 
+import gameController from './gameController';
+
 export default class Match extends React.Component {
 
     constructor(props) {
@@ -9,6 +11,14 @@ export default class Match extends React.Component {
         const position = undefined;
 
         this.state = { card, position };
+    }
+
+    componentDidMount() {
+        gameController.init(this.props.match);
+    }
+
+    componentDidUpdate() {
+        gameController.updateState(this.props.match);
     }
 
 	render() {
@@ -21,6 +31,7 @@ export default class Match extends React.Component {
 
 		return (
 			<div>
+                <div id="game"></div>
                 <p>Battle!</p>
                 <p>{players[0].name} <strong>VS</strong> {players[1].name}</p>
                 <p>Selected card:<br />{this.state.card}<br />Selected position:<br />{this.state.position}</p>
