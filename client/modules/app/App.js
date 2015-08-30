@@ -35,6 +35,11 @@ export default class App extends React.Component {
             const currentPageId = 'match';
             this.setState({ currentPageId, match });
         });
+
+        socket.on(Events.turnPerformed, (match) => {
+            const currentPageId = 'match';
+            this.setState({ currentPageId, match });
+        });
     }
     
     changeCurrentPage(newCurrentPageId) {
@@ -54,14 +59,24 @@ export default class App extends React.Component {
         socket.emit(Events.playerEnlisted);
     }
 
+    performTurn(cardId, cardPosition) {
+        this.props.socket.emit(Events.performTurn, {
+            cardId,
+            cardPosition,
+            actionType: 'cardPlaced'
+        });
+    }
+
     render() {
         const currentPage = this.props.modules[this.state.currentPageId];
         const { user } = this.state;
         const enlist = this.enlist.bind(this);
+        const performTurn = this.performTurn.bind(this);
 
         const pageProps = {
             user,
             enlist,
+            performTurn,
             changeCurrentPage: this.changeCurrentPage.bind(this),
             userToken: this.props.userToken,
             match: this.state.match
