@@ -69,6 +69,45 @@ html, body {
   background-size: 100%;
 }
 
+.attack, .defense {
+  position: absolute;
+  font-family: Arial;
+  font-size: 1em;
+  color: #B62A30;
+  font-weight: bold;
+  text-align: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.attack {
+  bottom: 4%;
+  left: 15%;
+  padding: 14% 13% 12% 13%;
+  background-image: url(/assets/crosshair-icon.png);
+}
+
+.defense {
+  left: auto;
+  right: 15%;
+  bottom: 7%;
+  padding: 9%;
+  background-image: url(/assets/shield-icon.png);
+}
+
+.attack-opponent, .defense-opponent {
+  color: #2B5D8B;
+}
+
+.attack-opponent {
+  background-image: url(/assets/crosshair-icon-opponent.png);
+}
+
+.defense-opponent {
+  background-image: url(/assets/shield-icon-opponent.png);
+}
+
 .animate-attack-top {
   animation: attack-top 0.20s ease-in-out 0s 6 alternate;
 }

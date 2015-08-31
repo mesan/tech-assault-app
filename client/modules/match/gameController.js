@@ -106,10 +106,26 @@ var renderController = function () {
 
         if (card.image) {
             let arrows = createElement("div", ["arrows"]);
+
+            const attackClasses = [ "attack" ];
+            const defenseClasses = [ "defense" ];
+
+            if (!card.isPlayerOwned) {
+                attackClasses.push("attack-opponent");
+                defenseClasses.push("defense-opponent");
+            }
+
+            let attack = createElement("div", attackClasses);
+            let defense = createElement("div", defenseClasses);
+
             el.appendChild(arrows);
+            el.appendChild(attack);
+            el.appendChild(defense);
             el.style.backgroundImage = `url(${card.image}), url(assets/card-background.png)`;
-            el.style.backgroundSize = '50%, 100%';
+            el.style.backgroundSize = '60%, 100%';
             arrows.classList.add(`arrows-${parseInt(card.arrows.join(""), 2)}`);
+            attack.textContent = card.attack;
+            defense.textContent = card.defense;
         }
 
         return el;
