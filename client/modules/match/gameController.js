@@ -131,6 +131,20 @@ var renderController = function () {
         return el;
     };
 
+    let turnCard = card => {
+        const cardElement = document.querySelector(`[id='${card.id}']`);
+        const cardsList = document.querySelector(`.cards`);
+        cardsList.removeChild(cardElement);
+        const newCardElement = createCard(card);
+
+        newCardElement.style.left = cardElement.style.left;
+        newCardElement.style.top = cardElement.style.top;
+        newCardElement.style.height = cardElement.style.height;
+        newCardElement.style.width = cardElement.style.width;
+
+        cardsList.appendChild(newCardElement);
+    };
+
     let addTiles = (container, count) => {
         container.appendChild(createElement("div", ["tile"]));
         if (count > 1) {
@@ -170,7 +184,7 @@ var renderController = function () {
         updateBoard(state.primaryDeck, state.opponentPrimaryDeck, state.board, state.cards);
     };
 
-    return { init, updateBoard, updateBoardCard, setCardOwner, animateFight };
+    return { init, updateBoard, updateBoardCard, setCardOwner, animateFight, turnCard };
 }
 
 var gameController = function () {
@@ -182,6 +196,11 @@ var gameController = function () {
         let actionTime = 500;
         switch (action.type) {
             case "cardPlaced":
+                if (!action.isPlayerOwned) {
+                    const cardIndex = state.cards.findIndex(card => card.id == action.cardId);
+                    const card = state.cards[cardIndex];
+                    renderer.turnCard(card);
+                }
                 renderer.updateBoardCard(action.cardId, action.cardPosition, true);
                 break;
             case "battle":
