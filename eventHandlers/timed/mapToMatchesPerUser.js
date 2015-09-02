@@ -1,5 +1,5 @@
 export default function mapToMatchesPerUser(match) {
-    const { board, nextTurn, score, actions, cards, users } = match;
+    const { board, nextTurn, score, actions, cards, users, cardsToLoot } = match;
     const [ player1PrimaryDeck, player2PrimaryDeck ] = match.primaryDecks;
     const [ user1, user2 ] = users;
 
@@ -30,6 +30,12 @@ export default function mapToMatchesPerUser(match) {
         }
     }
 
+    let winner;
+
+    if (match.finished) {
+        winner = score[0] > score[1] ? user1.id : user2.id;
+    }
+
     const match1 = {
         players,
         board,
@@ -37,7 +43,9 @@ export default function mapToMatchesPerUser(match) {
         actions: flatActions.map(actionMapper(user1.id)),
         cards: cards.map(cardMapper(user1.id)),
         primaryDeck: player1PrimaryDeck.map(cardMapper(user1.id)),
-        opponentPrimaryDeck: player2PrimaryDeck.map(card => card.id)
+        opponentPrimaryDeck: player2PrimaryDeck.map(card => card.id),
+        winner: winner === user1.id,
+        cardsToLoot
     };
 
     const match2 = {
@@ -47,7 +55,9 @@ export default function mapToMatchesPerUser(match) {
         actions: flatActions.map(actionMapper(user2.id)),
         cards: cards.map(cardMapper(user2.id)),
         primaryDeck: player2PrimaryDeck.map(cardMapper(user2.id)),
-        opponentPrimaryDeck: player1PrimaryDeck.map(card => card.id)
+        opponentPrimaryDeck: player1PrimaryDeck.map(card => card.id),
+        winner: winner === user2.id,
+        cardsToLoot
     };
 
     return [match1, match2];
