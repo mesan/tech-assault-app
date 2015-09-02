@@ -10,6 +10,33 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
 
     let getY = y => (board.offsetHeight / boardSize) * y + topHand.offsetHeight + 10;
 
+    let updateCardAttributes = (cardElement) => {
+
+        const cardWidth = cardElement.offsetWidth;
+
+        const attrWidth = cardWidth * 0.25;
+        const margin = cardWidth * 0.10;
+        const fontSize = attrWidth * 0.65;
+
+        const [ attackElement, defenseElement ] = cardElement.childNodes;
+
+        attackElement.style.width = `${attrWidth}px`;
+        attackElement.style.height = `${attrWidth}px`;
+        attackElement.style.borderRadius = `${attrWidth}px`;
+        attackElement.style.bottom = `${margin}px`;
+        attackElement.style.left = `${margin}px`;
+        attackElement.childNodes[0].style.lineHeight = `${attrWidth}px`;
+        attackElement.childNodes[0].style.fontSize = `${fontSize}px`;
+
+        defenseElement.style.width = `${attrWidth}px`;
+        defenseElement.style.height = `${attrWidth}px`;
+        defenseElement.style.borderRadius = `${attrWidth}px`;
+        defenseElement.style.bottom = `${margin}px`;
+        defenseElement.style.right = `${margin}px`;
+        defenseElement.childNodes[0].style.lineHeight = `${attrWidth}px`;
+        defenseElement.childNodes[0].style.fontSize = `${fontSize}px`;
+    };
+
     let updateBoardCard = (id, pos, transition = false) => {
         let element = document.querySelector(`[id='${id}'`);
 
@@ -22,6 +49,8 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         element.style.height = `${board.offsetHeight / boardSize}px`;
         element.style.width = `${board.offsetWidth / boardSize}px`;
         element.style.transitionDuration = "";
+
+        updateCardAttributes(element);
     }
 
     let updateHandCard = (id, hand, isBottomHand = false) => {
@@ -32,6 +61,10 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         card.style.height = `${board.offsetHeight / 5}px`;
         card.style.top = `${isBottomHand ? topHand.offsetHeight + board.offsetHeight + 20 : 0}px`;
         card.style.left = `${(board.offsetWidth / 5) * i}px`;
+
+        if (isBottomHand) {
+            updateCardAttributes(card);
+        }
     }
 
     let updateBoard = (playerCards, opponentCards, tiles, cards) => {
@@ -114,15 +147,23 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
 
             let attack = createElement("div", attackClasses);
             let defense = createElement("div", defenseClasses);
+            let attackSpan = createElement("span");
+            let defenseSpan = createElement("span");
 
-            el.appendChild(arrows);
+            attack.appendChild(attackSpan);
+            defense.appendChild(defenseSpan);
+
+            attackSpan.textContent = card.attack;
+            defenseSpan.textContent = card.defense;
+
             el.appendChild(attack);
             el.appendChild(defense);
+            el.appendChild(arrows);
+
             el.style.backgroundImage = `url(${card.image}), url(assets/card-background.png)`;
             el.style.backgroundSize = '60%, 100%';
+
             arrows.classList.add(`arrows-${parseInt(card.arrows.join(""), 2)}`);
-            attack.textContent = card.attack;
-            defense.textContent = card.defense;
         }
 
         return el;
@@ -134,10 +175,13 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         cardsList.removeChild(cardElement);
         const newCardElement = createCard(card);
 
+        newCardElement.style.transitionDuration = "2s";
+
         newCardElement.style.left = cardElement.style.left;
         newCardElement.style.top = cardElement.style.top;
         newCardElement.style.height = cardElement.style.height;
         newCardElement.style.width = cardElement.style.width;
+        newCardElement.style.transitionDuration = "";
 
         cardsList.appendChild(newCardElement);
     };
