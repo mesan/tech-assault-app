@@ -212,6 +212,11 @@ var gameController = function () {
 
     let updateState = newState => {
         state = newState;
+
+        state.opponentPrimaryDeck = newState.opponentPrimaryDeck.map(cardId => {
+            return { id: cardId, isPlayerOwned: false }
+        });
+
         runActionSequence(newState.actions);
     };
 
