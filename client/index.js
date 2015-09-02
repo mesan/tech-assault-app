@@ -10,6 +10,7 @@ import Highscore from './modules/highscore/Highscore';
 import Match from './modules/match/Match';
 import Enlist from './modules/enlist/Enlist';
 import Splash from './modules/splash/Splash';
+import Loot from './modules/loot/Loot';
 
 require('babel/polyfill');
 require('./modules/app/app.less');
@@ -20,7 +21,8 @@ const modules = {
     highscore: Highscore,
     match: Match,
     enlist: Enlist,
-    splash: Splash
+    splash: Splash,
+    loot: Loot
 };
 
 const socket = io();

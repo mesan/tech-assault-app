@@ -36,6 +36,11 @@ export default class App extends React.Component {
             this.setState({ currentPageId, match });
         });
 
+        socket.on(Events.matchFinished, (match) => {
+            const currentPageId = 'loot';
+            this.setState({ currentPageId, match });
+        });
+
         socket.on(Events.turnPerformed, (match) => {
             const currentPageId = 'match';
             this.setState({ currentPageId, match });

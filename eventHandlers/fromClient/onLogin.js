@@ -42,7 +42,8 @@ export default function onLogin(userToken) {
 
             const matchForUser = matchesPerUser[userIndex];
 
-            this.socket.emit(Events.matchStarted, matchForUser);
+            const eventType = match.finished ? Events.matchFinished : Events.matchStarted;
+            this.socket.emit(eventType, matchForUser);
         })
         .catch((err) => {
             if (err.status === 404) {

@@ -36,6 +36,16 @@ export default function mapToMatchesPerUser(match) {
         winner = score[0] > score[1] ? user1.id : user2.id;
     }
 
+    let cardsToLootCopy = cardsToLoot ? cardsToLoot.slice() : undefined;
+
+    let cardsToLootObjects;
+
+    if (cardsToLootCopy) {
+        cardsToLootObjects = cardsToLootCopy.map(cardId => {
+            return cards[cards.findIndex(card => card.id === cardId)];
+        });
+    }
+
     const match1 = {
         players,
         board,
@@ -44,8 +54,8 @@ export default function mapToMatchesPerUser(match) {
         cards: cards.map(cardMapper(user1.id)),
         primaryDeck: player1PrimaryDeck.map(cardMapper(user1.id)),
         opponentPrimaryDeck: player2PrimaryDeck.map(card => card.id),
-        winner: winner === user1.id,
-        cardsToLoot
+        winner: winnerMapper(winner, user1.id),
+        cardsToLoot: cardsToLootObjects ? cardsToLootObjects.map(cardMapper(user1.id)) : undefined
     };
 
     const match2 = {
@@ -56,8 +66,8 @@ export default function mapToMatchesPerUser(match) {
         cards: cards.map(cardMapper(user2.id)),
         primaryDeck: player2PrimaryDeck.map(cardMapper(user2.id)),
         opponentPrimaryDeck: player1PrimaryDeck.map(card => card.id),
-        winner: winner === user2.id,
-        cardsToLoot
+        winner: winnerMapper(winner, user2.id),
+        cardsToLoot: cardsToLootObjects ? cardsToLootObjects.map(cardMapper(user2.id)) : undefined
     };
 
     return [match1, match2];
@@ -78,14 +88,26 @@ function actionMapper(userId) {
         }
 
         const copiedAction = Object.keys(action).reduce((obj, property) => {
+            if (property === 'newOwner' || property === 'player') {
+                return obj;
+            }
+
             obj[property] = action[property];
             return obj;
         }, {});
 
-        const isPlayerOwned = copiedAction.newOwner === userId || copiedAction.player === userId;
+        const isPlayerOwned = action.newOwner === userId || action.player === userId;
 
         copiedAction.isPlayerOwned = isPlayerOwned;
 
         return copiedAction;
     };
+}
+
+function winnerMapper(winner, userId) {
+    if (!winner) {
+        return undefined;
+    }
+
+    return winner === userId;
 }
