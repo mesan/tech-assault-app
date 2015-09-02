@@ -67,13 +67,15 @@ function actionMapper(userId) {
             return action;
         }
 
-        const isPlayerOwned = action.newOwner === userId || action.player === userId;
+        const copiedAction = Object.keys(action).reduce((obj, property) => {
+            obj[property] = action[property];
+            return obj;
+        }, {});
 
-        action.newOwner = undefined;
-        action.player = undefined;
+        const isPlayerOwned = copiedAction.newOwner === userId || copiedAction.player === userId;
 
-        action.isPlayerOwned = isPlayerOwned;
+        copiedAction.isPlayerOwned = isPlayerOwned;
 
-        return action;
+        return copiedAction;
     };
 }
