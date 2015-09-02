@@ -110,11 +110,6 @@ var renderController = function () {
             const attackClasses = [ "attack" ];
             const defenseClasses = [ "defense" ];
 
-            if (!card.isPlayerOwned) {
-                attackClasses.push("attack-opponent");
-                defenseClasses.push("defense-opponent");
-            }
-
             let attack = createElement("div", attackClasses);
             let defense = createElement("div", defenseClasses);
 
