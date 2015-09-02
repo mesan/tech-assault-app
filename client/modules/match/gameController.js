@@ -1,4 +1,4 @@
-var renderController = function () {
+var renderController = function ({ tileEventListener, cardEventListener }) {
     const boardSize = 4;
     let game = null;
     let gameContainer = null;
@@ -104,6 +104,8 @@ var renderController = function () {
 
         el.id = card.id;
 
+        el.addEventListener("click", cardEventListener);
+
         if (card.image) {
             let arrows = createElement("div", ["arrows"]);
 
@@ -149,7 +151,14 @@ var renderController = function () {
 
     let addBoardTiles = (container, tiles) => {
         let classes = tiles[0] === 1 ? ["tile", "tile-hidden"] : ["tile"];
-        container.appendChild(createElement("div", classes));
+
+        const tile = createElement("div", classes);
+
+        tile.dataset.position = container.childNodes.length;
+
+        tile.addEventListener("click", tileEventListener);
+
+        container.appendChild(tile);
         if (tiles.length > 1) {
             addBoardTiles(container, tiles.slice(1));
         }
@@ -183,8 +192,24 @@ var renderController = function () {
 }
 
 var gameController = function () {
-    let renderer = renderController();
+    let renderer = renderController({ tileEventListener, cardEventListener });
     let state = null;
+
+    let selection = { cardId: undefined, cardPosition: undefined };
+
+    let cardPlacedListener;
+
+    function tileEventListener(event) {
+        selection.cardPosition = parseInt(event.target.dataset.position, 10);
+
+        if (typeof selection.cardId !== 'undefined') {
+            cardPlacedListener(selection);
+        }
+    }
+
+    function cardEventListener(event) {
+        selection.cardId = event.target.parentNode.id;
+    }
 
     let runActionSequence = sequence => {
         let action = sequence[0];
@@ -234,7 +259,11 @@ var gameController = function () {
         runActionSequence(newState.actions);
     };
 
-    return { init, updateState };
+    function onCardPlaced(listener) {
+        cardPlacedListener = listener;
+    }
+
+    return { init, updateState, onCardPlaced };
 }();
 
 export default gameController;

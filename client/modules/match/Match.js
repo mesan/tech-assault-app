@@ -6,15 +6,11 @@ export default class Match extends React.Component {
 
     constructor(props) {
         super(props);
-
-        const card = undefined;
-        const position = undefined;
-
-        this.state = { card, position };
     }
 
     componentDidMount() {
         gameController.init(this.props.match);
+        gameController.onCardPlaced(this.submit.bind(this));
     }
 
     componentDidUpdate() {
@@ -34,7 +30,6 @@ export default class Match extends React.Component {
                 <div id="game"></div>
                 <p>Battle!</p>
                 <p>{players[0].name} <strong>VS</strong> {players[1].name}</p>
-                <p>Selected card:<br />{this.state.card}<br />Selected position:<br />{this.state.position}</p>
                 <button onClick={this.submit.bind(this)}>Perform turn</button>
                 <ul>
                     {primaryDeck.map(card => <li id={card.id} onClick={this.selectCard.bind(this)}>{card.id}</li>)}
@@ -56,8 +51,8 @@ export default class Match extends React.Component {
         this.setState({ position });
     }
 
-    submit() {
-        this.props.performTurn(this.state.card, this.state.position);
+    submit(select) {
+        this.props.performTurn(select.cardId, select.cardPosition);
     }
 
 	
