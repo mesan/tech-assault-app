@@ -81,15 +81,15 @@ export default class App extends React.Component {
     render() {
         const currentPage = this.props.modules[this.state.currentPageId];
         const { user } = this.state;
-        const enlist = this.enlist.bind(this);
-        const performTurn = this.performTurn.bind(this);
-        const loot = this.loot.bind(this);
+        const onEnlist = this.enlist.bind(this);
+        const onPerformTurn = this.performTurn.bind(this);
+        const onLoot = this.loot.bind(this);
 
         const pageProps = {
             user,
-            enlist,
-            performTurn,
-            loot,
+            onEnlist,
+            onPerformTurn,
+            onLoot,
             changeCurrentPage: this.changeCurrentPage.bind(this),
             userToken: this.props.userToken,
             match: this.state.match

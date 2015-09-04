@@ -5,7 +5,7 @@ export default class Enlist extends React.Component {
 	constructor(props) {
 		super(props);
 		
-		this.props.enlist();
+		this.props.onEnlist();
 	}
 	
 	render() {

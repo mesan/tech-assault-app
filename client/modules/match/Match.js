@@ -52,7 +52,7 @@ export default class Match extends React.Component {
     }
 
     submit(select) {
-        this.props.performTurn(select.cardId, select.cardPosition);
+        this.props.onPerformTurn(select.cardId, select.cardPosition);
     }
 
 	

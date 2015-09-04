@@ -1,5 +1,5 @@
 export default function mapToMatchesPerUser(match) {
-    const { board, nextTurn, score, actions, cards, users, cardsToLoot } = match;
+    const { board, nextTurn, score, actions, cards, users, cardsToLoot, winner } = match;
     const [ player1PrimaryDeck, player2PrimaryDeck ] = match.primaryDecks;
     const [ user1, user2 ] = users;
 
@@ -28,12 +28,6 @@ export default function mapToMatchesPerUser(match) {
         for (let event of events) {
             flatActions.push(event);
         }
-    }
-
-    let winner;
-
-    if (match.finished) {
-        winner = score[0] > score[1] ? user1.id : user2.id;
     }
 
     let cardsToLootCopy = cardsToLoot ? cardsToLoot.slice() : undefined;

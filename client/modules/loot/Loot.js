@@ -47,6 +47,6 @@ export default class Loot extends React.Component {
 
         this.setState({ lootPerformed });
 
-        this.props.loot(this.state.selectedCardId);
+        this.props.onLoot(this.state.selectedCardId);
     }
 }
