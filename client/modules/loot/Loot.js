@@ -13,13 +13,10 @@ export default class Loot extends React.Component {
     }
 
     render() {
-        console.log(this.props.match);
-
         const { winner, cardsToLoot, cards } = this.props.match;
 
 
         const lootButtonDisabled = this.state.lootPerformed || typeof this.state.selectedCardId === 'undefined';
-        console.log(this.state.lootPerformed, this.state.selectedCardId, lootButtonDisabled);
 
         const lootButton = winner
             ? <button onClick={this.handleClick.bind(this)} disabled={lootButtonDisabled}>Loot!</button>

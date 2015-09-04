@@ -28,5 +28,7 @@ export default keyMirror({
     matchFinished: null, // The server informs both clients that the match is finished, and that the winner may loot the
                          // loser's cards.
 
-    loot: null
+    loot: null, // The client informs the server that the winner has picked a card to loot.
+
+    lootPerformed: null // The server informs both clients that the card(s) have been looted.
 });

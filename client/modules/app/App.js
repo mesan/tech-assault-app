@@ -45,6 +45,10 @@ export default class App extends React.Component {
             const currentPageId = 'match';
             this.setState({ currentPageId, match });
         });
+
+        socket.on(Events.lootPerformed, cardsLooted => {
+            console.log(cardsLooted);
+        })
     }
     
     changeCurrentPage(newCurrentPageId) {
