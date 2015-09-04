@@ -133,7 +133,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
     };
 
     let createCard = card => {
-        let el = createElement("div", ["card", card.isPlayerOwned ? "card-player" : "card-opponent"]);
+        let el = createElement("div", ["card", "card-battle", card.isPlayerOwned ? "card-player" : "card-opponent"]);
 
         el.id = card.id;
 

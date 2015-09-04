@@ -25,6 +25,8 @@ export default keyMirror({
     turnPerformed: null, // The server informs both clients that the player has performed his turn, and that it now is
                          // the other player's turn.
 
-    matchFinished: null // The server informs both clients that the match is finished, and that the winner may loot the
-                        // loser's cards.
+    matchFinished: null, // The server informs both clients that the match is finished, and that the winner may loot the
+                         // loser's cards.
+
+    loot: null
 });

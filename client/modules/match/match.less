@@ -48,7 +48,7 @@ html, body {
 }
 
 .card {
-  position: absolute;
+  position: relative;
   transition: all 0s ease-in-out;
   border: thin solid #D8D8D8;
   background-position: center;
@@ -58,12 +58,20 @@ html, body {
   height: 120px;
 }
 
+.card-battle {
+  position: absolute;
+}
+
 .card-opponent {
   background-color: #2B5D8B;
 }
 
 .card-player {
   background-color: #B62A30;
+}
+
+.card-selected {
+  opacity: .8;
 }
 
 .arrows {
