@@ -4,10 +4,12 @@ import requestUserByToken from '../../util/requests/requestUserByToken';
 import requestPostTurn from '../../util/requests/requestPostTurn';
 import mapToMatchesPerUser from '../timed/mapToMatchesPerUser';
 
+import { onTurnTimeout, onCountdownDecremented } from '../timed';
+
 export default function onPerformTurn(turn) {
     const { socket, server } = this;
     const { token } = socket;
-    const { tokenSocketMap, matchMap } = server;
+    const { tokenSocketMap, matchMap, matchIntervalMap } = server;
 
     let user;
 
@@ -29,10 +31,10 @@ export default function onPerformTurn(turn) {
             emits.push({ socket, userIndex });
 
             const userTokens = matchMap[matchId];
-            const otherTokens = userTokens.filter(userToken => userToken !== token);
+            const otherTokenIndex = userTokens.findIndex(userToken => userToken !== token);
 
-            if (otherTokens) {
-                const otherToken = otherTokens[0];
+            if (otherTokenIndex !== -1) {
+                const otherToken = userTokens[otherTokenIndex];
                 const opponentSocket = tokenSocketMap[otherToken];
 
                 if (opponentSocket) {
@@ -41,20 +43,35 @@ export default function onPerformTurn(turn) {
             }
 
             for (let emit of emits) {
-                const { socket, userIndex } = emit;
-                socket.emit(Events.turnPerformed, matchesPerUser[userIndex]);
+                emit.socket.emit(Events.turnPerformed, matchesPerUser[emit.userIndex]);
+            }
+
+            if (matchIntervalMap[matchId]) {
+                clearInterval(matchIntervalMap[matchId]);
             }
 
             if (matchFinished) {
                 for (let emit of emits) {
-                    const { socket, userIndex } = emit;
-                    socket.emit(Events.matchFinished, matchesPerUser[userIndex]);
+                    emit.socket.emit(Events.matchFinished, matchesPerUser[emit.userIndex]);
                 }
 
                 // If draw
                 if (cardsToLoot.length === 0) {
                     delete matchMap[matchId];
                 }
+            } else {
+                let countdown = 10;
+
+                matchIntervalMap[matchId] = setInterval(() => {
+                    countdown--;
+
+                    onCountdownDecremented.call(this, countdown, emits);
+
+                    if (countdown === 0) {
+                        onTurnTimeout.call(this, 5, emits);
+                        clearInterval(matchIntervalMap[matchId]);
+                    }
+                }, 1000);
             }
 
             return match;

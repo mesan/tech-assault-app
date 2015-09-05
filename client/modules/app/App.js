@@ -46,9 +46,17 @@ export default class App extends React.Component {
             this.setState({ currentPageId, match });
         });
 
+        socket.on(Events.turnCountdown, (countdown) => {
+            console.log(countdown);
+        });
+
         socket.on(Events.lootPerformed, cardsLooted => {
             console.log(cardsLooted);
-        })
+        });
+
+        socket.on(Events.turnDurationLimitExceeded, () => {
+            console.log('Exceeded!');
+        });
     }
     
     changeCurrentPage(newCurrentPageId) {

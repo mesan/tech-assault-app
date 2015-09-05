@@ -11,9 +11,13 @@ let tokenSocketMap = {};
 // Map of match IDs pointing to an array of the user tokens.
 let matchMap = {};
 
+// Map of match IDs pointing to turn intervals.
+const matchIntervalMap = {};
+
 function register(server, options, next) {
     server.tokenSocketMap = tokenSocketMap;
     server.matchMap = matchMap;
+    server.matchIntervalMap = matchIntervalMap;
 
     var io = socketIO(server.listener);
 

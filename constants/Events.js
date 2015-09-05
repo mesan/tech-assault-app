@@ -30,5 +30,13 @@ export default keyMirror({
 
     loot: null, // The client informs the server that the winner has picked a card to loot.
 
-    lootPerformed: null // The server informs both clients that the card(s) have been looted.
+    lootPerformed: null, // The server informs both clients that the card(s) have been looted.
+
+    turnCountdown: null, // The server informs of the updated turn countdown.
+
+    turnDurationLimitExceeded: null, // The server informs both clients that the turn duration limit has exceeded and
+                                     // the match is over.
+
+    lootDurationLimitExceeded: null // The server informs both clients that the loot duration limit has exceeded and
+                                    // no cards will be looted.
 });
