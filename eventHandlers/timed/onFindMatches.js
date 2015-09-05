@@ -14,7 +14,7 @@ import onCountdownDecremented from './onCountdownDecremented';
  * re-enlisted.
  */
 export default function onFindMatches() {
-    const { matchMap, matchIntervalMap }  = this;
+    const { matchMap, tokenSocketMap, matchIntervalMap }  = this;
 
     requestMatches()
         .then((matches) => {
@@ -46,7 +46,8 @@ export default function onFindMatches() {
 
                 initializeMatch(userToken1, userToken2)
                     .then((match) => {
-                        matchMap[match.matchId] = [ userToken1, userToken2 ];
+                        const userTokens = [ userToken1, userToken2 ];
+                        matchMap[match.matchId] = userTokens;
                         const [ match1, match2 ] = mapToMatchesPerUser(match);
 
                         socket1.emit(Events.matchStarted, match1);
@@ -54,10 +55,12 @@ export default function onFindMatches() {
 
                         let countdown = 30;
 
-                        const sockets = [ socket1, socket2 ];
-
                         matchIntervalMap[match.matchId] = setInterval(() => {
                             countdown--;
+
+                            const sockets = userTokens.map(token => {
+                                return tokenSocketMap[token];
+                            });
 
                             onCountdownDecremented.call(this, countdown, sockets);
 
@@ -67,7 +70,7 @@ export default function onFindMatches() {
                             }
                         }, 1000);
                     })
-                    .catch(console.error.bind(console));
+                    .catch((err) => console.log(err.stack));
             }
         });
 }

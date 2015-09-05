@@ -62,10 +62,12 @@ export default function onPerformTurn(turn) {
             } else {
                 let countdown = 30;
 
-                const sockets = emits.map(emit => emit.socket);
-
                 matchIntervalMap[matchId] = setInterval(() => {
                     countdown--;
+
+                    const sockets = userTokens.map(token => {
+                        return tokenSocketMap[token];
+                    });
 
                     onCountdownDecremented.call(this, countdown, sockets);
 
