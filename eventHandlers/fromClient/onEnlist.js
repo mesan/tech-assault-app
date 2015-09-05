@@ -11,14 +11,14 @@ export default function onEnlist() {
         .then(user => requestActiveMatchByUserId(user.id))
         .then(match => {
             if (match) {
-                return this.socket.emit(Events.userUnauthorized, { event: Events.playerEnlisted, reason: 'In match' });
+                return this.socket.emit(Events.userUnauthorized, { event: Events.enlist, reason: 'In match' });
             }
 
             return requestPostEnlistment(token);
         })
         .catch((err) => {
             if (err.status === 404) {
-                this.socket.emit(Events.userUnauthorized, { event: Events.playerEnlisted, reason: 'Not Found' });
+                this.socket.emit(Events.userUnauthorized, { event: Events.enlist, reason: 'Not Found' });
             }
             console.log(err.stack);
         });
