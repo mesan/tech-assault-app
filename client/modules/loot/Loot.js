@@ -15,20 +15,30 @@ export default class Loot extends React.Component {
     render() {
         const { winner, cardsToLoot, cards } = this.props.match;
 
-
         const lootButtonDisabled = this.state.lootPerformed || typeof this.state.selectedCardId === 'undefined';
 
-        const lootButton = winner
-            ? <button onClick={this.handleClick.bind(this)} disabled={lootButtonDisabled}>Loot!</button>
+        const lootButton = winner === true
+            ? <button onClick={this.handleLootClick.bind(this)} disabled={lootButtonDisabled}>Loot!</button>
             : undefined;
+
+        const backButton = winner === false || winner === 'N/A'
+            ? <button onClick={this.handleBackClick.bind(this)}>Back</button>
+            : undefined;
+
+        const title = winner === 'N/A'
+            ? 'It\'s a Draw!'
+            : winner === true
+                ? 'You Won!'
+                : 'You Lost!';
 
         return (
             <div>
-                You {winner ? 'Won' : 'Lost'}!
+                {title}
                 {cardsToLoot.map(this.renderCard.bind(this))}
                 {lootButton}
+                {backButton}
             </div>
-        )
+        );
     }
 
     renderCard(card) {
@@ -37,7 +47,13 @@ export default class Loot extends React.Component {
         return <Card key={card.id} onSelect={this.selectCard.bind(this)} selected={selected} card={card} />;
     }
 
-    handleClick(event) {
+    handleBackClick(event) {
+        event.preventDefault();
+
+        this.props.onExitLoot();
+    }
+
+    handleLootClick(event) {
         event.preventDefault();
 
         const lootPerformed = true;

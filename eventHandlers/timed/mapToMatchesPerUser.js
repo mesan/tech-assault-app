@@ -103,5 +103,9 @@ function winnerMapper(winner, userId) {
         return undefined;
     }
 
+    if (winner === 'N/A') {
+        return winner;
+    }
+
     return winner === userId;
 }
