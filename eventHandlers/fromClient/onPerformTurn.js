@@ -17,7 +17,9 @@ export default function onPerformTurn(turn) {
             return requestPostTurn(user.id, turn);
         })
         .then(match => {
-            const userIndex = match.users.map(user => user.id).indexOf(user.id);
+            const { matchId, users, finished: matchFinished, cardsToLoot } = match;
+
+            const userIndex = users.map(user => user.id).indexOf(user.id);
             const opponentIndex = userIndex === 0 ? 1 : 0;
 
             const matchesPerUser = mapToMatchesPerUser(match);
@@ -26,7 +28,7 @@ export default function onPerformTurn(turn) {
 
             emits.push({ socket, userIndex });
 
-            const userTokens = matchMap[match.matchId];
+            const userTokens = matchMap[matchId];
             const otherTokens = userTokens.filter(userToken => userToken !== token);
 
             if (otherTokens) {
@@ -43,17 +45,19 @@ export default function onPerformTurn(turn) {
                 socket.emit(Events.turnPerformed, matchesPerUser[userIndex]);
             }
 
-            if (match.finished) {
+            if (matchFinished) {
                 for (let emit of emits) {
                     const { socket, userIndex } = emit;
                     socket.emit(Events.matchFinished, matchesPerUser[userIndex]);
                 }
+
+                // If draw
+                if (cardsToLoot.length === 0) {
+                    delete matchMap[matchId];
+                }
             }
 
             return match;
-        })
-        .then(match => {
-            console.log(match.finished);
         })
         .catch(err => console.error(err.stack));
 }

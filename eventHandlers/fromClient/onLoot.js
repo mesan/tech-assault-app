@@ -14,9 +14,9 @@ export default function onLoot(loot) {
             return requestPostLootCard(userByToken.id, cardId)
         })
         .then(match => {
-            const userTokens = matchMap[match.matchId];
+            const { cards, cardsLooted, matchId } = match;
 
-            const { cards, cardsLooted } = match;
+            const userTokens = matchMap[matchId];
 
             const cardsLootedObjects = cardsLooted.map(cardId => {
                 const cardIndex = cards.findIndex(card => card.id === cardId);
@@ -27,6 +27,8 @@ export default function onLoot(loot) {
                 const userSocket = tokenSocketMap[userToken];
                 userSocket.emit(Events.lootPerformed, { cardsLooted: cardsLootedObjects });
             });
+
+            delete matchMap[matchId];
         })
         .catch(err => console.log(err.stack));
 }
