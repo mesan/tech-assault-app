@@ -1,12 +1,12 @@
 import onLogin from './onLogin';
-import onPlayerEnlisted from './onPlayerEnlisted';
+import onEnlist from './onEnlist';
 import onDisconnect from './onDisconnect';
 import onPerformTurn from './onPerformTurn';
 import onLoot from './onLoot';
 
 export default {
     onLogin,
-    onPlayerEnlisted,
+    onEnlist,
     onDisconnect,
     onPerformTurn,
     onLoot

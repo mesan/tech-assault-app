@@ -22,7 +22,7 @@ function register(server, options, next) {
         socket.emit(Events.loginRequested);
 
         socket.on(Events.login, eventHandlers.fromClient.onLogin.bind(requestContext));
-        socket.on(Events.playerEnlisted, eventHandlers.fromClient.onPlayerEnlisted.bind(requestContext));
+        socket.on(Events.enlist, eventHandlers.fromClient.onEnlist.bind(requestContext));
         socket.on(Events.disconnect, eventHandlers.fromClient.onDisconnect.bind(requestContext));
         socket.on(Events.performTurn, eventHandlers.fromClient.onPerformTurn.bind(requestContext));
         socket.on(Events.loot, eventHandlers.fromClient.onLoot.bind(requestContext));

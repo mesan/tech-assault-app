@@ -53,7 +53,6 @@ export default class App extends React.Component {
     
     changeCurrentPage(newCurrentPageId) {
         const currentPageId = !this.props.userToken ? 'login' : newCurrentPageId;
-
         this.setState({ currentPageId });
     }
     
@@ -65,7 +64,7 @@ export default class App extends React.Component {
     enlist() {
         const { socket } = this.props;
 
-        socket.emit(Events.playerEnlisted);
+        socket.emit(Events.enlist);
     }
 
     performTurn(cardId, cardPosition) {

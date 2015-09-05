@@ -4,7 +4,7 @@ import requestActiveMatchByUserId from '../../util/requests/requestActiveMatchBy
 
 import Events from '../../constants/Events';
 
-export default function onPlayerEnlisted() {
+export default function onEnlist() {
     const { token } = this.socket;
 
     requestUserByToken(token)

@@ -16,7 +16,7 @@ export default keyMirror({
 
     userUnauthorized: null, // The server informs the client that he is not authorized to perform a given request.
 
-    playerEnlisted: null, // The player enlists for a match.
+    enlist: null, // The player enlists for a match.
 
     matchStarted: null, // The server informs the client that an opponent has been found and a match has been started.
 
