@@ -5,8 +5,10 @@ import Events from './constants/Events';
 // Timed events and events from client.
 import eventHandlers from './eventHandlers';
 
+// Map of user tokens pointing to their respective socket.
 let tokenSocketMap = {};
 
+// Map of match IDs pointing to an array of the user tokens.
 let matchMap = {};
 
 function register(server, options, next) {
