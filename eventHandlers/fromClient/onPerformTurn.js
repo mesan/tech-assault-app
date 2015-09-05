@@ -19,7 +19,7 @@ export default function onPerformTurn(turn) {
             return requestPostTurn(user.id, turn);
         })
         .then(match => {
-            const { matchId, users, finished: matchFinished, cardsToLoot } = match;
+            const { matchId, users, finished: matchFinished, cardsToLoot, nextTurn } = match;
 
             const userIndex = users.map(user => user.id).indexOf(user.id);
             const opponentIndex = userIndex === 0 ? 1 : 0;
@@ -60,15 +60,17 @@ export default function onPerformTurn(turn) {
                     delete matchMap[matchId];
                 }
             } else {
-                let countdown = 10;
+                let countdown = 30;
+
+                const sockets = emits.map(emit => emit.socket);
 
                 matchIntervalMap[matchId] = setInterval(() => {
                     countdown--;
 
-                    onCountdownDecremented.call(this, countdown, emits);
+                    onCountdownDecremented.call(this, countdown, sockets);
 
                     if (countdown === 0) {
-                        onTurnTimeout.call(this, 5, emits);
+                        onTurnTimeout.call(this, 5, sockets, nextTurn);
                         clearInterval(matchIntervalMap[matchId]);
                     }
                 }, 1000);
