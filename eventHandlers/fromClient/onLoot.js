@@ -2,6 +2,8 @@ import requestUserByToken from '../../util/requests/requestUserByToken';
 import requestPostLootCard from '../../util/requests/requestPostLootCard';
 import Events from '../../constants/Events';
 
+import mapToMatchesPerUser from '../timed/mapToMatchesPerUser';
+
 export default function onLoot(loot) {
     const { socket, server } = this;
     const { matchMap, tokenSocketMap } = server;
@@ -18,15 +20,15 @@ export default function onLoot(loot) {
 
             const userTokens = matchMap[matchId];
 
-            const cardsLootedObjects = cardsLooted.map(cardId => {
-                const cardIndex = cards.findIndex(card => card.id === cardId);
-                return cards[cardIndex];
-            });
+            const matchEvents = mapToMatchesPerUser(match);
 
-            userTokens.forEach(userToken => {
-                const userSocket = tokenSocketMap[userToken];
-                userSocket.emit(Events.lootPerformed, { cardsLooted: cardsLootedObjects });
-            });
+            for (let i = 0; i < userTokens.length; i++) {
+                const userSocket = tokenSocketMap[userTokens[i]];
+
+                if (userSocket) {
+                    userSocket.emit(Events.lootPerformed, matchEvents[i]);
+                }
+            }
 
             delete matchMap[matchId];
         })

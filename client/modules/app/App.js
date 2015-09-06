@@ -41,7 +41,7 @@ export default class App extends React.Component {
         socket.on(Events.matchFinished, (match) => {
             const setStateFunc = () => this.setState({currentPageId: 'loot', match});
 
-            if (this.state.currentPageId === 'match') {
+            if (this.state.currentPageId === 'match' && !match.turnTimedOut) {
                 gameController.onActionSequenceCompletedOnce(() => {
                     setTimeout(setStateFunc, 1000);
                 });
@@ -62,7 +62,7 @@ export default class App extends React.Component {
         socket.on(Events.lootPerformed, (match) => {
             const setStateFunc = () => this.setState({currentPageId: 'looted', match});
 
-            if (this.state.currentPageId === 'match') {
+            if (this.state.currentPageId === 'match' && !match.turnTimedOut) {
                 gameController.onActionSequenceCompletedOnce(() => {
                     setTimeout(setStateFunc, 1000);
                 });

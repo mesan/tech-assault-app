@@ -44,7 +44,9 @@ export default function onPerformTurn(turn) {
             }
 
             for (let emit of emits) {
-                emit.socket.emit(Events.turnPerformed, matchesPerUser[emit.userIndex]);
+                if (emit.socket) {
+                    emit.socket.emit(Events.turnPerformed, matchesPerUser[emit.userIndex]);
+                }
             }
 
             if (matchIntervalMap[matchId]) {
@@ -57,7 +59,9 @@ export default function onPerformTurn(turn) {
                     : Events.matchFinished;
 
                 for (let emit of emits) {
-                    emit.socket.emit(eventType, matchesPerUser[emit.userIndex]);
+                    if (emit.socket) {
+                        emit.socket.emit(eventType, matchesPerUser[emit.userIndex]);
+                    }
                 }
 
                 if ((typeof cardsToLoot !== 'undefined' && cardsToLoot.length === 0) ||
@@ -65,7 +69,7 @@ export default function onPerformTurn(turn) {
                     delete matchMap[matchId];
                 }
             } else {
-                let initialCountdown = 30;
+                let initialCountdown = 10;
 
                 matchIntervalMap[matchId] = startCountdown({
                     initialCountdown,

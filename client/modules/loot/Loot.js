@@ -13,7 +13,7 @@ export default class Loot extends React.Component {
     }
 
     render() {
-        const { winner, cardsToLoot, cards } = this.props.match;
+        const { winner, cardsToLoot, cards, turnTimedOut } = this.props.match;
 
         const lootButtonDisabled = this.state.lootPerformed || typeof this.state.selectedCardId === 'undefined';
 
@@ -31,9 +31,15 @@ export default class Loot extends React.Component {
                 ? 'You Won!'
                 : 'You Lost!';
 
+        const text = winner === true ? <p>Pick a card:</p> : <p>Waiting for opponent to pick a card...</p>;
+
+        const reason = turnTimedOut ? <p>Reason: Timeout</p> : undefined;
+
         return (
             <div>
                 <h2>{title}</h2>
+                {reason}
+                {text}
                 {cardsToLoot.map(this.renderCard.bind(this))}
                 {lootButton}
                 {backButton}
