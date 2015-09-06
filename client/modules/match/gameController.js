@@ -242,6 +242,7 @@ var gameController = function () {
     let selection = { cardId: undefined, cardPosition: undefined };
 
     let cardPlacedListener;
+    let actionSequenceListener;
 
     function tileEventListener(event) {
         selection.cardPosition = parseInt(event.target.dataset.position, 10);
@@ -274,11 +275,18 @@ var gameController = function () {
                 break;
             case "takeOver":
                 renderer.setCardOwner(action.cardId, action.isPlayerOwned ? "player" : "opponent", true);
+                break;
             default:
                 break;
         }
+
         if (sequence.length > 1) {
-            setTimeout(() => runActionSequence(sequence.slice(1)), actionTime);
+            return setTimeout(() => runActionSequence(sequence.slice(1)), actionTime);
+        }
+
+        if (typeof actionSequenceListener === 'function') {
+            setTimeout(actionSequenceListener, actionTime);
+            actionSequenceListener = undefined;
         }
     };
 
@@ -293,7 +301,7 @@ var gameController = function () {
         window.addEventListener("resize", () => renderer.updateBoard(state.primaryDeck, state.opponentPrimaryDeck, state.board, state.cards));
     };
 
-    let updateState = newState => {
+    let updateState = (newState) => {
         state = newState;
 
         state.opponentPrimaryDeck = newState.opponentPrimaryDeck.map(cardId => {
@@ -307,7 +315,11 @@ var gameController = function () {
         cardPlacedListener = listener;
     }
 
-    return { init, updateState, onCardPlaced };
+    function onActionSequenceCompletedOnce(listener) {
+        actionSequenceListener = listener;
+    }
+
+    return { init, updateState, onCardPlaced, onActionSequenceCompletedOnce };
 }();
 
 export default gameController;

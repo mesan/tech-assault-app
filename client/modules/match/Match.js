@@ -1,7 +1,5 @@
 import React from 'react';
 
-import gameController from './gameController';
-
 export default class Match extends React.Component {
 
     constructor(props) {
@@ -9,16 +7,15 @@ export default class Match extends React.Component {
     }
 
     componentDidMount() {
-        gameController.init(this.props.match);
-        gameController.onCardPlaced(this.submit.bind(this));
+        this.props.gameController.init(this.props.match);
+        this.props.gameController.onCardPlaced(this.submit.bind(this));
     }
 
     componentDidUpdate() {
-        gameController.updateState(this.props.match);
+        this.props.gameController.updateState(this.props.match);
     }
 
 	render() {
-
         const { players, board, primaryDeck } = this.props.match;
 
         console.log(this.props.match);

@@ -1,6 +1,8 @@
 import React from 'react';
 import Events from '../../../constants/Events';
 
+import gameController from '../match/gameController';
+
 export default class App extends React.Component {
     
     constructor(props) {
@@ -37,8 +39,9 @@ export default class App extends React.Component {
         });
 
         socket.on(Events.matchFinished, (match) => {
-            const currentPageId = 'loot';
-            this.setState({ currentPageId, match });
+            gameController.onActionSequenceCompletedOnce(() => {
+                setTimeout(() => this.setState({ currentPageId: 'loot', match }), 1000);
+            });
         });
 
         socket.on(Events.turnPerformed, (match) => {
@@ -107,6 +110,7 @@ export default class App extends React.Component {
             onPerformTurn,
             onLoot,
             onExitLoot,
+            gameController,
             changeCurrentPage: this.changeCurrentPage.bind(this),
             userToken: this.props.userToken,
             match: this.state.match
