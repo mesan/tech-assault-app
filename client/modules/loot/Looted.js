@@ -4,16 +4,22 @@ import Card from '../common/Card';
 export default class Looted extends React.Component {
 
     render() {
-        const { winner } = this.props.match;
-        const { cardsLooted } = this.props;
+        const { winner, cardsLooted } = this.props.match;
 
-        const title = winner === true
+        const title = winner === 'N/A'
+            ? 'It\'s a Draw!'
+            : winner === true
+            ? 'You Won!'
+            : 'You Lost!';
+
+        const text = winner === true
             ? 'You acquired the following cards:'
             : 'You lost the following cards:';
 
         return (
             <div>
-                {title}
+                <h2>{title}</h2>
+                {text}
                 {cardsLooted.map(this.renderCard.bind(this))}
                 <button onClick={this.handleBackClick.bind(this)}>Back</button>
             </div>

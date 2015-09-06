@@ -11,9 +11,8 @@ export default class App extends React.Component {
         const currentPageId = 'splash';
         const user = {};
         const match = undefined;
-        const cardsLooted = undefined;
 
-        this.state = { currentPageId, user, match, cardsLooted };
+        this.state = { currentPageId, user, match };
     }
     
     componentDidMount() {
@@ -40,9 +39,15 @@ export default class App extends React.Component {
         });
 
         socket.on(Events.matchFinished, (match) => {
-            gameController.onActionSequenceCompletedOnce(() => {
-                setTimeout(() => this.setState({ currentPageId: 'loot', match }), 1000);
-            });
+            const setStateFunc = () => this.setState({currentPageId: 'loot', match});
+
+            if (this.state.currentPageId === 'match') {
+                gameController.onActionSequenceCompletedOnce(() => {
+                    setTimeout(setStateFunc, 1000);
+                });
+            } else {
+                setStateFunc();
+            }
         });
 
         socket.on(Events.turnPerformed, (match) => {
@@ -54,12 +59,19 @@ export default class App extends React.Component {
             console.log(countdown);
         });
 
-        socket.on(Events.lootPerformed, ({ cardsLooted }) => {
-            this.setState({ currentPageId: 'looted', cardsLooted });
+        socket.on(Events.lootPerformed, (match) => {
+            const setStateFunc = () => this.setState({currentPageId: 'looted', match});
+
+            if (this.state.currentPageId === 'match') {
+                gameController.onActionSequenceCompletedOnce(() => {
+                    setTimeout(setStateFunc, 1000);
+                });
+            } else {
+                setStateFunc();
+            }
         });
 
         socket.on(Events.turnDurationLimitExceeded, () => {
-            console.log('Exceeded!');
         });
     }
     

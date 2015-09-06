@@ -28,7 +28,7 @@ export default function onLogin(userToken) {
                 return;
             }
 
-            const { matchId } = match;
+            const { matchId, cardsLooted } = match;
 
             const userIndex = match.users.map(user => user.id).indexOf(user.id);
 
@@ -42,7 +42,12 @@ export default function onLogin(userToken) {
 
             const matchForUser = matchesPerUser[userIndex];
 
-            const eventType = match.finished ? Events.matchFinished : Events.matchStarted;
+            const eventType = match.finished
+                ? cardsLooted && cardsLooted.length > 0
+                    ? Events.lootPerformed
+                    : Events.matchFinished
+                : Events.matchStarted;
+
             this.socket.emit(eventType, matchForUser);
         })
         .catch((err) => {

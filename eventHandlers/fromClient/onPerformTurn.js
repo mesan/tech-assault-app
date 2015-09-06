@@ -20,7 +20,7 @@ export default function onPerformTurn(turn) {
             return requestPostTurn(user.id, turn);
         })
         .then(match => {
-            const { matchId, users, finished: matchFinished, cardsToLoot, nextTurn } = match;
+            const { matchId, users, finished: matchFinished, cardsToLoot, nextTurn, cardsLooted } = match;
 
             const userIndex = users.map(user => user.id).indexOf(user.id);
             const opponentIndex = userIndex === 0 ? 1 : 0;
@@ -52,12 +52,16 @@ export default function onPerformTurn(turn) {
             }
 
             if (matchFinished) {
+                const eventType = cardsLooted && cardsLooted.length > 0
+                    ? Events.lootPerformed
+                    : Events.matchFinished;
+
                 for (let emit of emits) {
-                    emit.socket.emit(Events.matchFinished, matchesPerUser[emit.userIndex]);
+                    emit.socket.emit(eventType, matchesPerUser[emit.userIndex]);
                 }
 
-                // If draw
-                if (cardsToLoot.length === 0) {
+                if ((typeof cardsToLoot !== 'undefined' && cardsToLoot.length === 0) ||
+                    (typeof cardsLooted !== 'undefined' && cardsLooted.length > 0)) {
                     delete matchMap[matchId];
                 }
             } else {

@@ -33,7 +33,7 @@ export default class Loot extends React.Component {
 
         return (
             <div>
-                {title}
+                <h2>{title}</h2>
                 {cardsToLoot.map(this.renderCard.bind(this))}
                 {lootButton}
                 {backButton}

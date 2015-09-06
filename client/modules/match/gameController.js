@@ -285,8 +285,10 @@ var gameController = function () {
         }
 
         if (typeof actionSequenceListener === 'function') {
-            setTimeout(actionSequenceListener, actionTime);
-            actionSequenceListener = undefined;
+            setTimeout(() => {
+                actionSequenceListener();
+                actionSequenceListener = undefined;
+            }, actionTime);
         }
     };
 
@@ -308,7 +310,7 @@ var gameController = function () {
             return { id: cardId, isPlayerOwned: false }
         });
 
-        runActionSequence(newState.actions);
+        setTimeout(() => runActionSequence(newState.actions), 0);
     };
 
     function onCardPlaced(listener) {
