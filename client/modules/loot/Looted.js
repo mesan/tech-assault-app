@@ -12,8 +12,6 @@ export default class Looted extends React.Component {
             ? 'You Won!'
             : 'You Lost!';
 
-        console.log(winner);
-
         const text = winner === true
             ? 'You acquired the following cards:'
             : 'You lost the following cards:';
