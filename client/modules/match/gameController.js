@@ -44,30 +44,62 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
             element.style.transitionDuration = "0.5s";
         }
 
-        element.style.left = `${getX(pos % boardSize)}px`;
-        element.style.top = `${getY(Math.floor(pos / boardSize))}px`;
-        element.style.height = `${board.offsetHeight / boardSize}px`;
-        element.style.width = `${board.offsetWidth / boardSize}px`;
+        const margin = 1;
+
+        element.style.transitionProperty = "left, top, background-color";
+        element.style.left = `${getX(pos % boardSize) + margin}px`;
+        element.style.top = `${getY(Math.floor(pos / boardSize)) + margin}px`;
+        element.style.height = `${board.offsetHeight / boardSize - margin * 2}px`;
+        element.style.width = `${board.offsetWidth / boardSize - margin * 2}px`;
         element.style.transitionDuration = "";
 
         updateCardAttributes(element);
-    }
+    };
 
-    let updateHandCard = (id, hand, isBottomHand = false) => {
+    let updateHandClickableState = (card, isPlayerTurn) => {
+        card.classList.remove('card-clickable');
+
+        if (isPlayerTurn) {
+            card.classList.add('card-clickable');
+        } else {
+            card.classList.remove('card-clickable');
+        }
+    };
+
+    let updateHandCard = (id, hand, isPlayerTurn, isBottomHand = false) => {
         let i = hand.findIndex(c => c && c.id === id);
         let card = document.querySelector(`[id='${id}'`);
+        const margin = 10;
 
-        card.style.width = `${board.offsetWidth / 5}px`;
-        card.style.height = `${board.offsetHeight / 5}px`;
+        const cardWidth = board.offsetWidth / 5 - (margin * 4 / 5);
+        const cardHeight = board.offsetHeight / 5 - (margin * 4 / 5);
+
+        updateHandClickableState(card, isPlayerTurn);
+
+        card.style.width = `${cardWidth}px`;
+        card.style.height = `${cardHeight}px`;
         card.style.top = `${isBottomHand ? topHand.offsetHeight + board.offsetHeight + 20 : 0}px`;
-        card.style.left = `${(board.offsetWidth / 5) * i}px`;
+        card.style.left = `${(cardWidth) * i + (i * margin)}px`;
 
         if (isBottomHand) {
             updateCardAttributes(card);
         }
-    }
+    };
 
-    let updateBoard = (playerCards, opponentCards, tiles, cards) => {
+    let updateCardClickableState = (playerCards, isPlayerTurn) => {
+        const playerCardElements = document.querySelectorAll('.card-player');
+
+        for (let playerCardElement of playerCardElements) {
+            playerCardElement.classList.remove('card-clickable');
+        }
+
+        playerCards.forEach(c => {
+            const cardElement = document.querySelector(`[id='${c.id}']`);
+            updateHandClickableState(cardElement, isPlayerTurn);
+        });
+    };
+
+    let updateBoard = (playerCards, opponentCards, tiles, isPlayerTurn) => {
         let gHeight = game.offsetHeight;
         let gWidth = game.offsetWidth;
         let bHeight = 0;
@@ -91,7 +123,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         bottomHand.style.width = `${bWidth}px`;
         bottomHand.style.height = `${bWidth / 5}px`;
 
-        playerCards.forEach(c => updateHandCard(c.id, playerCards, true));
+        playerCards.forEach(c => updateHandCard(c.id, playerCards, isPlayerTurn, true));
         opponentCards.filter(c => c !== null).forEach(c => updateHandCard(c.id, opponentCards, false));
 
         for (var i = 0; i < tiles.length; i++) {
@@ -132,8 +164,14 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         return el;
     };
 
-    let createCard = card => {
-        let el = createElement("div", ["card", "card-battle", card.isPlayerOwned ? "card-player" : "card-opponent"]);
+    let createCard = (card, isPlayerTurn) => {
+        const cardClasses = ["card", "card-battle", card.isPlayerOwned ? "card-player" : "card-opponent"];
+
+        if (isPlayerTurn) {
+            cardClasses.push("card-clickable");
+        }
+
+        let el = createElement("div", cardClasses);
 
         el.id = card.id;
 
@@ -226,13 +264,13 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         let cards = createElement("div", ["cards"]);
         gameContainer.appendChild(cards);
         state.cards.forEach(card => cards.appendChild(createCard(card)));
-        state.primaryDeck.forEach(card => cards.appendChild(createCard(card)));
+        state.primaryDeck.forEach(card => cards.appendChild(createCard(card, state.isPlayerTurn)));
         state.opponentPrimaryDeck.forEach(card => cards.appendChild(createCard(card)));
 
-        updateBoard(state.primaryDeck, state.opponentPrimaryDeck, state.board, state.cards);
+        updateBoard(state.primaryDeck, state.opponentPrimaryDeck, state.board, state.isPlayerTurn);
     };
 
-    return { init, updateBoard, updateBoardCard, setCardOwner, animateFight, turnCard };
+    return { init, updateBoard, updateBoardCard, setCardOwner, animateFight, turnCard, updateCardClickableState };
 }
 
 var gameController = function () {
@@ -300,7 +338,13 @@ var gameController = function () {
         });
 
         renderer.init("game", initialState);
-        window.addEventListener("resize", () => renderer.updateBoard(state.primaryDeck, state.opponentPrimaryDeck, state.board, state.cards));
+        window.addEventListener("resize", () => {
+            renderer.updateBoard(
+                state.primaryDeck,
+                state.opponentPrimaryDeck,
+                state.board,
+                state.isPlayerTurn);
+        });
     };
 
     let updateState = (newState) => {
@@ -309,6 +353,8 @@ var gameController = function () {
         state.opponentPrimaryDeck = newState.opponentPrimaryDeck.map(cardId => {
             return { id: cardId, isPlayerOwned: false }
         });
+
+        renderer.updateCardClickableState(newState.primaryDeck, newState.isPlayerTurn);
 
         setTimeout(() => runActionSequence(newState.actions), 0);
     };
