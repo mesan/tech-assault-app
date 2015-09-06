@@ -11,6 +11,7 @@ import Match from './modules/match/Match';
 import Enlist from './modules/enlist/Enlist';
 import Splash from './modules/splash/Splash';
 import Loot from './modules/loot/Loot';
+import Looted from './modules/loot/Looted';
 
 require('babel/polyfill');
 require('./modules/app/app.less');
@@ -22,7 +23,8 @@ const modules = {
     match: Match,
     enlist: Enlist,
     splash: Splash,
-    loot: Loot
+    loot: Loot,
+    looted: Looted
 };
 
 const socket = io();

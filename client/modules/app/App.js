@@ -11,8 +11,9 @@ export default class App extends React.Component {
         const currentPageId = 'splash';
         const user = {};
         const match = undefined;
+        const cardsLooted = undefined;
 
-        this.state = { currentPageId, user, match };
+        this.state = { currentPageId, user, match, cardsLooted };
     }
     
     componentDidMount() {
@@ -53,8 +54,8 @@ export default class App extends React.Component {
             console.log(countdown);
         });
 
-        socket.on(Events.lootPerformed, cardsLooted => {
-            console.log(cardsLooted);
+        socket.on(Events.lootPerformed, ({ cardsLooted }) => {
+            this.setState({ currentPageId: 'looted', cardsLooted });
         });
 
         socket.on(Events.turnDurationLimitExceeded, () => {
@@ -113,7 +114,8 @@ export default class App extends React.Component {
             gameController,
             changeCurrentPage: this.changeCurrentPage.bind(this),
             userToken: this.props.userToken,
-            match: this.state.match
+            match: this.state.match,
+            cardsLooted: this.state.cardsLooted
         };
         
         return (
