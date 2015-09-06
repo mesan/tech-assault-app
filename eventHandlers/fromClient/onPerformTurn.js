@@ -3,6 +3,7 @@ import Events from '../../constants/Events';
 import requestUserByToken from '../../util/requests/requestUserByToken';
 import requestPostTurn from '../../util/requests/requestPostTurn';
 import mapToMatchesPerUser from '../timed/mapToMatchesPerUser';
+import startCountdown from '../timed/startCountdown';
 
 import { onTurnTimeout, onCountdownDecremented } from '../timed';
 
@@ -60,22 +61,27 @@ export default function onPerformTurn(turn) {
                     delete matchMap[matchId];
                 }
             } else {
-                let countdown = 30;
+                let initialCountdown = 30;
 
-                matchIntervalMap[matchId] = setInterval(() => {
-                    countdown--;
+                matchIntervalMap[matchId] = startCountdown({
+                    initialCountdown,
+                    countdownDecrementedCallback(secondsLeft) {
+                        const sockets = userTokens.map(token => {
+                            return tokenSocketMap[token];
+                        });
 
-                    const sockets = userTokens.map(token => {
-                        return tokenSocketMap[token];
-                    });
-
-                    onCountdownDecremented.call(this, countdown, sockets);
-
-                    if (countdown === 0) {
-                        onTurnTimeout.call(this, 5, sockets, nextTurn);
+                        onCountdownDecremented(sockets, secondsLeft);
+                    },
+                    turnTimeoutCallback(initialCountdown) {
                         clearInterval(matchIntervalMap[matchId]);
+
+                        const sockets = userTokens.map(token => {
+                            return tokenSocketMap[token];
+                        });
+
+                        onTurnTimeout(sockets, initialCountdown, nextTurn);
                     }
-                }, 1000);
+                });
             }
 
             return match;

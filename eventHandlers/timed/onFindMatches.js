@@ -7,6 +7,7 @@ import mapToMatchesPerUser from './mapToMatchesPerUser';
 
 import onTurnTimeout from './onTurnTimeout';
 import onCountdownDecremented from './onCountdownDecremented';
+import startCountdown from './startCountdown';
 
 /**
  * At intervals, the system checks for players that have enlisted themselves for matches. The system matches players
@@ -53,22 +54,27 @@ export default function onFindMatches() {
                         socket1.emit(Events.matchStarted, match1);
                         socket2.emit(Events.matchStarted, match2);
 
-                        let countdown = 30;
+                        let initialCountdown = 30;
 
-                        matchIntervalMap[match.matchId] = setInterval(() => {
-                            countdown--;
+                        matchIntervalMap[match.matchId] = startCountdown({
+                            initialCountdown,
+                            countdownDecrementedCallback(secondsLeft) {
+                                const sockets = userTokens.map(token => {
+                                    return tokenSocketMap[token];
+                                });
 
-                            const sockets = userTokens.map(token => {
-                                return tokenSocketMap[token];
-                            });
-
-                            onCountdownDecremented.call(this, countdown, sockets);
-
-                            if (countdown === 0) {
-                                onTurnTimeout.call(this, 30, sockets, match.nextTurn);
+                                onCountdownDecremented(sockets, secondsLeft);
+                            },
+                            turnTimeoutCallback(initialCountdown) {
                                 clearInterval(matchIntervalMap[match.matchId]);
+
+                                const sockets = userTokens.map(token => {
+                                    return tokenSocketMap[token];
+                                });
+
+                                onTurnTimeout(sockets, initialCountdown, match.nextTurn);
                             }
-                        }, 1000);
+                        });
                     })
                     .catch((err) => console.log(err.stack));
             }
