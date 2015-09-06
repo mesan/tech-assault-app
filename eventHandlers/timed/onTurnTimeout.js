@@ -3,11 +3,13 @@ import Events from '../../constants/Events';
 import requestPostTurnTimeout from '../../util/requests/requestPostTurnTimeout';
 import mapToMatchesPerUser from './mapToMatchesPerUser';
 
-export default function onTurnTimeout(sockets, timeLimit, nextTurn) {
+import onCountdownDecremented from './onCountdownDecremented';
+import onLootTimeout from './onLootTimeout';
+import startCountdown from './startCountdown';
+
+export default function onTurnTimeout(sockets, timeLimit, nextTurn, matchIntervalMap) {
     requestPostTurnTimeout(nextTurn)
         .then((match) => {
-            const { users } = match;
-
             const eventType = match.cardsLooted && match.cardsLooted.length > 0
                 ? Events.lootPerformed
                 : Events.matchFinished;
@@ -20,6 +22,22 @@ export default function onTurnTimeout(sockets, timeLimit, nextTurn) {
                 if (socket) {
                     socket.emit(eventType, matchEvents[i]);
                 }
+            }
+
+            if (eventType !== Events.lootPerformed) {
+                const initialCountdown = 30;
+                matchIntervalMap[match.matchId] = startCountdown({
+                    initialCountdown,
+                    countdownDecrementedCallback(secondsLeft) {
+                        onCountdownDecremented(sockets, secondsLeft);
+                    },
+                    turnTimeoutCallback(initialCountDown) {
+                        clearInterval(matchIntervalMap[match.matchId]);
+                        delete matchIntervalMap[match.matchId];
+
+                        onLootTimeout(sockets, initialCountdown, nextTurn);
+                    }
+                });
             }
         })
         .catch(err => console.log(err.stack));

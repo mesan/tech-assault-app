@@ -12,6 +12,7 @@ import Enlist from './modules/enlist/Enlist';
 import Splash from './modules/splash/Splash';
 import Loot from './modules/loot/Loot';
 import Looted from './modules/loot/Looted';
+import LootTimeout from './modules/loot/LootTimeout';
 
 require('babel/polyfill');
 require('./modules/app/app.less');
@@ -24,7 +25,8 @@ const modules = {
     enlist: Enlist,
     splash: Splash,
     loot: Loot,
-    looted: Looted
+    looted: Looted,
+    lootTimeout: LootTimeout
 };
 
 const socket = io();

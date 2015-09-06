@@ -50,6 +50,10 @@ export default class App extends React.Component {
             }
         });
 
+        socket.on(Events.lootTimedOut, (match) => {
+            this.setState({ currentPageId: 'lootTimeout', match });
+        });
+
         socket.on(Events.turnPerformed, (match) => {
             const currentPageId = 'match';
             this.setState({ currentPageId, match });

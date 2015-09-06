@@ -54,7 +54,7 @@ export default function onFindMatches() {
                         socket1.emit(Events.matchStarted, match1);
                         socket2.emit(Events.matchStarted, match2);
 
-                        let initialCountdown = 10;
+                        let initialCountdown = 30;
 
                         matchIntervalMap[match.matchId] = startCountdown({
                             initialCountdown,
@@ -67,6 +67,7 @@ export default function onFindMatches() {
                             },
                             turnTimeoutCallback(initialCountdown) {
                                 clearInterval(matchIntervalMap[match.matchId]);
+                                delete matchIntervalMap[match.matchId];
 
                                 const sockets = userTokens.map(token => {
                                     return tokenSocketMap[token];

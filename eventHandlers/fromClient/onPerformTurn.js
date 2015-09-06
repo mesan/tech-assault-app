@@ -5,7 +5,7 @@ import requestPostTurn from '../../util/requests/requestPostTurn';
 import mapToMatchesPerUser from '../timed/mapToMatchesPerUser';
 import startCountdown from '../timed/startCountdown';
 
-import { onTurnTimeout, onCountdownDecremented } from '../timed';
+import { onTurnTimeout, onCountdownDecremented, onLootTimeout } from '../timed';
 
 export default function onPerformTurn(turn) {
     const { socket, server } = this;
@@ -51,6 +51,7 @@ export default function onPerformTurn(turn) {
 
             if (matchIntervalMap[matchId]) {
                 clearInterval(matchIntervalMap[matchId]);
+                delete matchIntervalMap[matchId];
             }
 
             if (matchFinished) {
@@ -64,12 +65,39 @@ export default function onPerformTurn(turn) {
                     }
                 }
 
+                if (eventType !== Events.lootPerformed) {
+                    const initialCountdown = 30;
+
+                    matchIntervalMap[matchId] = startCountdown({
+                        initialCountdown,
+                        countdownDecrementedCallback(secondsLeft) {
+                            const sockets = userTokens.map(token => {
+                                return tokenSocketMap[token];
+                            });
+
+                            onCountdownDecremented(sockets, secondsLeft);
+                        },
+                        turnTimeoutCallback(initialCountDown) {
+                            clearInterval(matchIntervalMap[matchId]);
+                            delete matchIntervalMap[matchId];
+
+                            const sockets = userTokens.map(token => {
+                                return tokenSocketMap[token];
+                            });
+
+                            onLootTimeout(sockets, initialCountdown);
+                        }
+                    });
+                }
+
                 if ((typeof cardsToLoot !== 'undefined' && cardsToLoot.length === 0) ||
                     (typeof cardsLooted !== 'undefined' && cardsLooted.length > 0)) {
                     delete matchMap[matchId];
                 }
             } else {
-                let initialCountdown = 10;
+                // match not finished.
+
+                let initialCountdown = 30;
 
                 matchIntervalMap[matchId] = startCountdown({
                     initialCountdown,
@@ -82,12 +110,13 @@ export default function onPerformTurn(turn) {
                     },
                     turnTimeoutCallback(initialCountdown) {
                         clearInterval(matchIntervalMap[matchId]);
+                        delete matchIntervalMap[matchId];
 
                         const sockets = userTokens.map(token => {
                             return tokenSocketMap[token];
                         });
 
-                        onTurnTimeout(sockets, initialCountdown, nextTurn);
+                        onTurnTimeout(sockets, initialCountdown, nextTurn, matchIntervalMap);
                     }
                 });
             }

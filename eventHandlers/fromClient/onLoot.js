@@ -6,7 +6,7 @@ import mapToMatchesPerUser from '../timed/mapToMatchesPerUser';
 
 export default function onLoot(loot) {
     const { socket, server } = this;
-    const { matchMap, tokenSocketMap } = server;
+    const { matchMap, tokenSocketMap, matchIntervalMap } = server;
     const { token } = socket;
 
     const { cardId } = loot;
@@ -16,6 +16,9 @@ export default function onLoot(loot) {
             return requestPostLootCard(userByToken.id, cardId)
         })
         .then(match => {
+            clearInterval(matchIntervalMap[match.matchId]);
+            delete matchIntervalMap[match.matchId];
+
             const { cards, cardsLooted, matchId } = match;
 
             const userTokens = matchMap[matchId];
