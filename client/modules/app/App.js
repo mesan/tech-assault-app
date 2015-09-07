@@ -12,8 +12,9 @@ export default class App extends React.Component {
         const user = {};
         const match = undefined;
         const secondsLeft = undefined;
+        const deck = undefined;
 
-        this.state = { currentPageId, user, match, secondsLeft };
+        this.state = { currentPageId, user, match, secondsLeft, deck };
     }
     
     componentDidMount() {
@@ -32,6 +33,10 @@ export default class App extends React.Component {
         socket.on(Events.loginRefused, (reason) => {
             console.log('loginrefused', reason);
             this.changeCurrentPage('login');
+        });
+
+        socket.on(Events.deckReceived, deck => {
+            this.setState({ deck });
         });
 
         socket.on(Events.matchStarted, (match) => {
@@ -97,6 +102,20 @@ export default class App extends React.Component {
         socket.emit(Events.enlist);
     }
 
+    requestDeck() {
+        const { socket } = this.props;
+
+        socket.emit(Events.requestDeck);
+    }
+
+    updatePrimaryDeck(newPrimaryDeck) {
+        const { socket } = this.props;
+
+        socket.emit(Events.updatePrimaryDeck, {
+            primaryDeck: newPrimaryDeck
+        });
+    }
+
     performTurn(cardId, cardPosition) {
         this.props.socket.emit(Events.performTurn, {
             cardId,
@@ -122,22 +141,27 @@ export default class App extends React.Component {
         const onPerformTurn = this.performTurn.bind(this);
         const onLoot = this.loot.bind(this);
         const onExitLoot = this.exitLoot.bind(this);
+        const onRequestDeck = this.requestDeck.bind(this);
+        const onUpdatePrimaryDeck = this.updatePrimaryDeck.bind(this);
 
         const pageProps = {
             user,
             onEnlist,
+            onUpdatePrimaryDeck,
             onPerformTurn,
             onLoot,
             onExitLoot,
+            onRequestDeck,
             gameController,
             changeCurrentPage: this.changeCurrentPage.bind(this),
             userToken: this.props.userToken,
             match: this.state.match,
+            deck: this.state.deck,
             cardsLooted: this.state.cardsLooted,
             secondsLeft: this.state.secondsLeft,
             highscores: this.state.highscores
         };
-        
+
         return (
             <div>
                 <h1>
