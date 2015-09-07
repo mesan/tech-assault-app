@@ -26,9 +26,16 @@ export default class Deck extends React.Component {
 
         return (
             <section>
+                <button onClick={this.handleBackClick.bind(this)}>Back</button>
                 {deck.map(this.renderCard.bind(this))}
             </section>
         );
+    }
+
+    handleBackClick(event) {
+        event.preventDefault();
+
+        this.props.onExitDeck();
     }
 
     renderCard(card) {
