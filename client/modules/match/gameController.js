@@ -280,7 +280,7 @@ var gameController = function () {
     let selection = { cardId: undefined, cardPosition: undefined };
 
     let cardPlacedListener;
-    let actionSequenceListener;
+    let actionSequencePromise;
 
     function tileEventListener(event) {
         selection.cardPosition = parseInt(event.target.dataset.position, 10);
@@ -294,7 +294,7 @@ var gameController = function () {
         selection.cardId = event.target.parentNode.id;
     }
 
-    let runActionSequence = sequence => {
+    let runActionSequence = (sequence, resolve) => {
         let action = sequence[0];
         let actionTime = 500;
         switch (action.type) {
@@ -319,15 +319,10 @@ var gameController = function () {
         }
 
         if (sequence.length > 1) {
-            return setTimeout(() => runActionSequence(sequence.slice(1)), actionTime);
+            return setTimeout(() => runActionSequence(sequence.slice(1), resolve), actionTime);
         }
 
-        if (typeof actionSequenceListener === 'function') {
-            setTimeout(() => {
-                actionSequenceListener();
-                actionSequenceListener = undefined;
-            }, actionTime);
-        }
+        resolve();
     };
 
     let init = initialState => {
@@ -356,18 +351,20 @@ var gameController = function () {
 
         renderer.updateCardClickableState(newState.primaryDeck, newState.isPlayerTurn);
 
-        setTimeout(() => runActionSequence(newState.actions), 0);
+        actionSequencePromise = new Promise((resolve, reject) => {
+            runActionSequence(newState.actions, resolve), 0
+        });
     };
 
     function onCardPlaced(listener) {
         cardPlacedListener = listener;
     }
 
-    function onActionSequenceCompletedOnce(listener) {
-        actionSequenceListener = listener;
+    function getAnimationPromise() {
+        return actionSequencePromise;
     }
 
-    return { init, updateState, onCardPlaced, onActionSequenceCompletedOnce };
+    return { init, updateState, onCardPlaced, getAnimationPromise };
 }();
 
 export default gameController;

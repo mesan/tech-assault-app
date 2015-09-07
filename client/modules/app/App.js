@@ -42,7 +42,7 @@ export default class App extends React.Component {
             const setStateFunc = () => this.setState({currentPageId: 'loot', match});
 
             if (this.state.currentPageId === 'match' && !match.turnTimedOut) {
-                gameController.onActionSequenceCompletedOnce(() => {
+                gameController.getAnimationPromise().then(() => {
                     setTimeout(setStateFunc, 1000);
                 });
             } else {
@@ -67,15 +67,12 @@ export default class App extends React.Component {
             const setStateFunc = () => this.setState({currentPageId: 'looted', match});
 
             if (this.state.currentPageId === 'match' && !match.turnTimedOut) {
-                gameController.onActionSequenceCompletedOnce(() => {
+                gameController.getAnimationPromise().then(() => {
                     setTimeout(setStateFunc, 1000);
                 });
             } else {
                 setStateFunc();
             }
-        });
-
-        socket.on(Events.turnDurationLimitExceeded, () => {
         });
     }
     
