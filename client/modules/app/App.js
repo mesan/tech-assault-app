@@ -69,9 +69,9 @@ export default class App extends React.Component {
             this.setState({ secondsLeft: countdown.secondsLeft });
         });
 
-        socket.on(Events.highscores, (highscores) => {
+        socket.on(Events.highscoresReceived, (highscores) => {
             this.setState({ highscores: highscores });
-        })
+        });
 
         socket.on(Events.lootPerformed, (match) => {
             const setStateFunc = () => this.setState({currentPageId: 'looted', match});
@@ -116,6 +116,12 @@ export default class App extends React.Component {
         });
     }
 
+    highscores() {
+        const { socket } = this.props;
+
+        socket.emit(Events.highscores);
+    }
+
     performTurn(cardId, cardPosition) {
         this.props.socket.emit(Events.performTurn, {
             cardId,
@@ -143,6 +149,7 @@ export default class App extends React.Component {
         const onExitLoot = this.exitLoot.bind(this);
         const onRequestDeck = this.requestDeck.bind(this);
         const onUpdatePrimaryDeck = this.updatePrimaryDeck.bind(this);
+        const onHighscores = this.highscores.bind(this);
 
         const pageProps = {
             user,
@@ -159,6 +166,7 @@ export default class App extends React.Component {
             deck: this.state.deck,
             cardsLooted: this.state.cardsLooted,
             secondsLeft: this.state.secondsLeft,
+            onHighscores,
             highscores: this.state.highscores
         };
 

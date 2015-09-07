@@ -43,5 +43,7 @@ export default keyMirror({
     lootTimedOut: null, // The server informs both clients that the loot duration limit has exceeded and
                        // no cards will be looted.
 
-    highscores: null // A client requests the highscore list from the server
+    highscores: null, // A client requests the highscore list from the server
+
+    highscoresReceived: null // The server informs the client that the highscore list is ready to be processed.
 });
