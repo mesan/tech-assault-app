@@ -12,16 +12,27 @@ export default class Loot extends React.Component {
         this.setState({ selectedCardId });
     }
 
+    isWinnerAndHasCardsToLoot() {
+        const { cardsToLoot, winner } = this.props.match;
+
+        return cardsToLoot && cardsToLoot.length > 0 && winner === true;
+    }
+
+    isDrawOrLoserOrHasNoCardsToLoot() {
+        const { winner, cardsToLoot } = this.props.match;
+        return winner === false || winner === 'N/A' || (!cardsToLoot || cardsToLoot.length === 0);
+    }
+
     render() {
         const { winner, cardsToLoot, cards, turnTimedOut } = this.props.match;
 
         const lootButtonDisabled = this.state.lootPerformed || typeof this.state.selectedCardId === 'undefined';
 
-        const lootButton = winner === true
+        const lootButton = this.isWinnerAndHasCardsToLoot()
             ? <button onClick={this.handleLootClick.bind(this)} disabled={lootButtonDisabled}>Loot!</button>
             : undefined;
 
-        const backButton = winner === false || winner === 'N/A'
+        const backButton = this.isDrawOrLoserOrHasNoCardsToLoot()
             ? <button onClick={this.handleBackClick.bind(this)}>Back</button>
             : undefined;
 
@@ -31,7 +42,11 @@ export default class Loot extends React.Component {
                 ? 'You Won!'
                 : 'You Lost!';
 
-        const text = winner === true ? <p>Pick a card:</p> : <p>Waiting for opponent to pick a card...</p>;
+        const text = !cardsToLoot || cardsToLoot.length === 0
+            ? undefined
+            : winner === true
+                ? <p>Pick a card:</p>
+                : <p>Waiting for opponent to pick a card...</p>;
 
         const reason = turnTimedOut ? <p>Reason: Timeout</p> : undefined;
 
