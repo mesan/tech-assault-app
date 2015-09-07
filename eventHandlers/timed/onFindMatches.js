@@ -73,7 +73,7 @@ export default function onFindMatches() {
                                     return tokenSocketMap[token];
                                 });
 
-                                onTurnTimeout(sockets, initialCountdown, match.nextTurn);
+                                onTurnTimeout(sockets, initialCountdown, match.nextTurn, matchIntervalMap);
                             }
                         });
                     })
