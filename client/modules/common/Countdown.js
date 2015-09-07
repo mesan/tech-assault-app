@@ -3,7 +3,7 @@ import React from 'react';
 export default class Countdown extends React.Component {
 
     render() {
-        if (this.props.secondsLeft > 10) {
+        if (this.props.secondsLeft > 10 || this.props.secondsLeft === 0) {
             return <span />;
         }
 
