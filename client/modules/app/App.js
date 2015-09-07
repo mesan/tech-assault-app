@@ -130,7 +130,8 @@ export default class App extends React.Component {
             userToken: this.props.userToken,
             match: this.state.match,
             cardsLooted: this.state.cardsLooted,
-            secondsLeft: this.state.secondsLeft
+            secondsLeft: this.state.secondsLeft,
+            highscores: this.state.highscores
         };
         
         return (

@@ -5,7 +5,8 @@ export default class Highscore extends React.Component {
 	render() {
 		return (
 			<section>
-				<p>Here i will list the highscores</p>
+				<h1>Highscores:</h1>
+
 			</section>
 		);
 	}

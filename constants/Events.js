@@ -34,6 +34,8 @@ export default keyMirror({
 
     turnCountdown: null, // The server informs of the updated turn countdown.
 
-    lootTimedOut: null // The server informs both clients that the loot duration limit has exceeded and
+    lootTimedOut: null, // The server informs both clients that the loot duration limit has exceeded and
                        // no cards will be looted.
+
+    highscores: null // A client requests the highscore list from the server
 });
