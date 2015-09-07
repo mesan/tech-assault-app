@@ -1,5 +1,4 @@
 import React from 'react';
-import MatchBoard from './MatchBoard';
 
 export default class Countdown extends React.Component {
 

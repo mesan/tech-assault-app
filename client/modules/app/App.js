@@ -36,7 +36,7 @@ export default class App extends React.Component {
 
         socket.on(Events.matchStarted, (match) => {
             const currentPageId = 'match';
-            this.setState({ currentPageId, match });
+            this.setState({ currentPageId, match, secondsLeft: undefined });
         });
 
         socket.on(Events.matchFinished, (match) => {
