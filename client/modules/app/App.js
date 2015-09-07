@@ -136,6 +136,10 @@ export default class App extends React.Component {
         });
     }
 
+    exitDeck() {
+        this.changeCurrentPage('home');
+    }
+
     exitLoot() {
         this.changeCurrentPage('home');
     }
@@ -147,6 +151,7 @@ export default class App extends React.Component {
         const onPerformTurn = this.performTurn.bind(this);
         const onLoot = this.loot.bind(this);
         const onExitLoot = this.exitLoot.bind(this);
+        const onExitDeck = this.exitDeck.bind(this);
         const onRequestDeck = this.requestDeck.bind(this);
         const onUpdatePrimaryDeck = this.updatePrimaryDeck.bind(this);
         const onHighscores = this.highscores.bind(this);
@@ -158,6 +163,7 @@ export default class App extends React.Component {
             onPerformTurn,
             onLoot,
             onExitLoot,
+            onExitDeck,
             onRequestDeck,
             gameController,
             changeCurrentPage: this.changeCurrentPage.bind(this),
