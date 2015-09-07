@@ -11,8 +11,9 @@ export default class App extends React.Component {
         const currentPageId = 'splash';
         const user = {};
         const match = undefined;
+        const secondsLeft = undefined;
 
-        this.state = { currentPageId, user, match };
+        this.state = { currentPageId, user, match, secondsLeft };
     }
     
     componentDidMount() {
@@ -60,7 +61,7 @@ export default class App extends React.Component {
         });
 
         socket.on(Events.turnCountdown, (countdown) => {
-            console.log(countdown);
+            this.setState({ secondsLeft: countdown.secondsLeft });
         });
 
         socket.on(Events.lootPerformed, (match) => {
@@ -128,7 +129,8 @@ export default class App extends React.Component {
             changeCurrentPage: this.changeCurrentPage.bind(this),
             userToken: this.props.userToken,
             match: this.state.match,
-            cardsLooted: this.state.cardsLooted
+            cardsLooted: this.state.cardsLooted,
+            secondsLeft: this.state.secondsLeft
         };
         
         return (
