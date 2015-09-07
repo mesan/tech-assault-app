@@ -154,7 +154,8 @@ export default class App extends React.Component {
             match: this.state.match,
             deck: this.state.deck,
             cardsLooted: this.state.cardsLooted,
-            secondsLeft: this.state.secondsLeft
+            secondsLeft: this.state.secondsLeft,
+            highscores: this.state.highscores
         };
 
         return (

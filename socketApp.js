@@ -34,6 +34,7 @@ function register(server, options, next) {
         socket.on(Events.disconnect, eventHandlers.fromClient.onDisconnect.bind(requestContext));
         socket.on(Events.performTurn, eventHandlers.fromClient.onPerformTurn.bind(requestContext));
         socket.on(Events.loot, eventHandlers.fromClient.onLoot.bind(requestContext));
+        socket.on(Events.highscores, eventHandlers.fromClient.onHighscores.bind(requestContext));
     });
 
     setInterval(eventHandlers.timed.onFindMatches.bind(server), 5000);
