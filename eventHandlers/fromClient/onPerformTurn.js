@@ -65,7 +65,7 @@ export default function onPerformTurn(turn) {
                     }
                 }
 
-                if (eventType !== Events.lootPerformed) {
+                if (eventType !== Events.lootPerformed && match.cardsToLoot.length > 0) {
                     const initialCountdown = 30;
 
                     matchIntervalMap[matchId] = startCountdown({
