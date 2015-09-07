@@ -1,6 +1,6 @@
 const arrowCount = 8;
 
-for (let i = 0; i < 255; i++) {
+for (let i = 0; i <= 255; i++) {
     const bin = dec2bin(i);
 
     const images = [];
@@ -33,5 +33,4 @@ for (let i = 0; i < 255; i++) {
 
 function dec2bin(dec){
     return dec.toString(2);
-    //return (dec >>> 0).toString(2);
 }
