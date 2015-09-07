@@ -12,6 +12,10 @@ export default class Card extends React.Component {
 
         const classes = ['card', 'card-player'];
 
+        if (this.props.className) {
+            classes.push(this.props.className);
+        }
+
         if (this.props.selected) {
             classes.push('card-selected');
         }

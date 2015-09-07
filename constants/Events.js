@@ -16,6 +16,12 @@ export default keyMirror({
 
     userUnauthorized: null, // The server informs the client that he is not authorized to perform a given request.
 
+    requestDeck: null, // The client informs that he would like his deck (and his primary deck).
+
+    deckReceived: null, // The server provide the client with the player's deck and primary deck.
+
+    updatePrimaryDeck: null, // The client informs that the player has updated his primary deck.
+
     enlist: null, // The player enlists for a match.
 
     matchStarted: null, // The server informs the client that an opponent has been found and a match has been started.
