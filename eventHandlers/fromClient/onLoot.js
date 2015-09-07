@@ -35,5 +35,5 @@ export default function onLoot(loot) {
 
             delete matchMap[matchId];
         })
-        .catch(err => console.log(err.stack));
+        .catch(err => console.error('Could not perform loot', err, err.stack));
 }

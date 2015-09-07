@@ -40,5 +40,5 @@ export default function onTurnTimeout(sockets, timeLimit, nextTurn, matchInterva
                 });
             }
         })
-        .catch(err => console.log(err.stack));
+        .catch(err => console.error('Could not timeout turn', err, err.stack));
 }

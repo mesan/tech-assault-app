@@ -10,12 +10,6 @@ export default function onEnlist() {
     requestUserByToken(token)
         .then(user => requestPostEnlistment(user.id, token))
         .catch((err) => {
-            /*if (match) {
-                return this.socket.emit(Events.userUnauthorized, { event: Events.enlist, reason: 'In match' });
-            }
-            if (err.status === 404) {
-                this.socket.emit(Events.userUnauthorized, { event: Events.enlist, reason: 'Not Found' });
-            }*/
-            console.log(err.stack);
+            console.error('Could not enlist player', err, err.stack);
         });
 }

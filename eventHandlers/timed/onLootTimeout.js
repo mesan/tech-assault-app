@@ -15,5 +15,5 @@ export default function onLootTimeout(sockets, initialCountdown, nextTurn) {
                 }
             }
         })
-        .catch(err => console.log(err.stack));
+        .catch(err => console.error('Could not timeout loot', err, err.stack));
 }

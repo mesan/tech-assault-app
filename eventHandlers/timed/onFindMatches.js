@@ -77,7 +77,7 @@ export default function onFindMatches() {
                             }
                         });
                     })
-                    .catch((err) => console.log(err.stack));
+                    .catch((err) => console.error('Could not initialize match', err, err.stack));
             }
         });
 }

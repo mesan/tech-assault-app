@@ -123,5 +123,5 @@ export default function onPerformTurn(turn) {
 
             return match;
         })
-        .catch(err => console.error(err.stack));
+        .catch(err => console.error('Could not perform turn', err, err.stack));
 }

@@ -56,6 +56,6 @@ export default function onLogin(userToken) {
                 return;
             }
 
-            console.log(err.stack);
+            console.error('Could not login user', err, err.stack);
         });
 }
