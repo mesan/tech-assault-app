@@ -1,6 +1,12 @@
 import React from 'react';
 
 export default class Highscore extends React.Component {
+
+	constructor(props) {
+		super(props);
+
+		this.props.highscores;
+	}
 	
 	render() {
 		return (

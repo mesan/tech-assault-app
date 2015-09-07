@@ -7,7 +7,7 @@ export default class App extends React.Component {
     
     constructor(props) {
         super(props);
-        
+
         const currentPageId = 'splash';
         const user = {};
         const match = undefined;
@@ -63,6 +63,10 @@ export default class App extends React.Component {
         socket.on(Events.turnCountdown, (countdown) => {
             this.setState({ secondsLeft: countdown.secondsLeft });
         });
+
+        socket.on(Events.highscores, (highscores) => {
+            this.setState({ highscores: highscores });
+        })
 
         socket.on(Events.lootPerformed, (match) => {
             const setStateFunc = () => this.setState({currentPageId: 'looted', match});
