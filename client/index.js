@@ -7,6 +7,7 @@ import App from './modules/app/App';
 import Home from './modules/home/Home';
 import Login from './modules/login/Login';
 import Highscore from './modules/highscore/Highscore';
+import Deck from './modules/deck/Deck';
 import Match from './modules/match/Match';
 import Enlist from './modules/enlist/Enlist';
 import Splash from './modules/splash/Splash';
@@ -21,6 +22,7 @@ const modules = {
     home: Home,
     login: Login,
     highscore: Highscore,
+    deck: Deck,
     match: Match,
     enlist: Enlist,
     splash: Splash,

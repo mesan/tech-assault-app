@@ -21,6 +21,10 @@ export default class Home extends React.Component {
     goToHighscores() {
         this.props.changeCurrentPage('highscore');
     }
+
+    goToDeck() {
+        this.props.changeCurrentPage('deck');
+    }
     
     goToEnlistPage() {
         this.props.changeCurrentPage('enlist');
@@ -30,6 +34,7 @@ export default class Home extends React.Component {
         const buttons = [
             { key: 'enlist', title: 'Play', clickHandler: this.goToEnlistPage.bind(this) },
             { key: 'highscore', title: 'High Scores', clickHandler: this.goToHighscores.bind(this) },
+            { key: 'deck', title: 'Choose Deck', clickHandler: this.goToDeck.bind(this) }
         ];
 
         const { user } = this.props;
