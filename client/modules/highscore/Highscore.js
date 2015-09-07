@@ -32,7 +32,7 @@ export default class Highscore extends React.Component {
 		const { playerName, rank, score } = playerScore;
 
 		return (
-			<div>
+			<div key={rank}>
 				<img className="highscore-avatar" src={userAvatar} />
 				<div><span className="highscore-name">{playerName}</span></div>
 				<div><span className="highscore-rank">{rank}</span>st / <span className="highscore-score">{score}</span>p</div>
