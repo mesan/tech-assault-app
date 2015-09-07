@@ -9,7 +9,6 @@ export default function onUpdatePrimaryDeck({ primaryDeck }) {
 
     requestUserByToken(token)
         .then(user => {
-            console.log(primaryDeck);
             return requestPutPlayerPrimaryDeck(user.id, primaryDeck);
         })
         .then(deck => {
