@@ -21,6 +21,8 @@ export default class Match extends React.Component {
             <div className={`match-meta-player match-meta-player-${isPlayer ? 'you' : 'opponent'}`}>
                 <img className="match-meta-player-avatar" src={player.avatar} />
                 <span className="match-meta-player-name">{player.name}</span>
+                <span className="match-meta-player-rank">{player.highscore.rank}</span>
+                <span className="match-meta-player-score">{player.highscore.score}</span>
             </div>
         );
     }
