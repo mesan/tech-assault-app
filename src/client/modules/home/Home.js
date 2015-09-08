@@ -51,7 +51,7 @@ export default class Home extends React.Component {
         });
 		
 		return (
-			<section className="page-home">
+			<section className="page page-home">
                 <img className="avatar avatar-home" src={userAvatar} />
                 <p className="welcome">Welcome, {userName}</p>
                 <ul className="no-bullets home-button-list">{buttonElements}</ul>
