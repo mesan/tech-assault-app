@@ -22,6 +22,8 @@ if (undefinedEnvVars.length > 0) {
     process.exit(1);
 }
 
+require("console-stamp")(console, { pattern: 'yymmdd/HHMMss.L'});
+
 const {
     TECH_AUTH_ENDPOINT
     } = process.env;
@@ -32,6 +34,14 @@ server.connection({
     port: process.env.PORT || 3000,
     host: process.env.HOST || 'localhost'
 });
+
+var options = {
+    opsInterval: 1000,
+    reporters: [{
+        reporter: require('good-console'),
+        events: { log: '*', request: '*', response: '*' }
+    }]
+};
 
 server.route({
     method: 'GET',
@@ -52,12 +62,23 @@ server.route({
     }
 });
 
-server.register(socketApp, (err) => {
-    if (err) {
-        console.log(err);
-    }
+server.register({
+    register: require('good'),
+    options: options
+}, function (err) {
 
-    server.start(() => {
-        console.log('Server running at:', server.info.uri);
-    });
+    if (err) {
+        console.error(err);
+    }
+    else {
+        server.register(socketApp, (err) => {
+            if (err) {
+                console.log(err);
+            }
+
+            server.start(() => {
+                console.log('Server running at:', server.info.uri);
+            });
+        });
+    }
 });
