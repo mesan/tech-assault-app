@@ -19,9 +19,13 @@ export default class App extends React.Component {
     
     componentDidMount() {
         const { socket } = this.props;
-        
+
         socket.on(Events.loginRequested, () => {
-           socket.emit(Events.login, this.props.userToken); 
+            if (this.props.userToken) {
+                socket.emit(Events.login, this.props.userToken);
+            } else {
+                this.changeCurrentPage('login');
+            }
         });
         
         socket.on(Events.loginAccepted, (user) => {
