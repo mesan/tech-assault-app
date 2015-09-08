@@ -17,12 +17,22 @@ export default class Match extends React.Component {
 
     renderPlayer(player, index) {
         const isPlayer = player.name === this.props.user.name;
+
+        const lastDigit = parseInt((player.highscore.rank + '').split('').pop());
+
+        const suffix = lastDigit === 1 ? 'st' : lastDigit === 2 ? 'nd' : lastDigit === 3 ? 'rd' : 'th';
+
         return (
             <div className={`match-meta-player match-meta-player-${isPlayer ? 'you' : 'opponent'}`}>
                 <img className="match-meta-player-avatar" src={player.avatar} />
-                <span className="match-meta-player-name">{player.name}</span>
-                <span className="match-meta-player-rank">{player.highscore.rank}</span>
-                <span className="match-meta-player-score">{player.highscore.score}</span>
+                <div className="match-meta-player-info">
+                    <span className="match-meta-player-name">{player.name}</span>
+                    <span className="match-meta-player-rank">{player.highscore.rank}{suffix}</span>
+                    <span className="match-meta-player-score">
+                        {player.highscore.score}
+                        <span className="match-meta-player-score-suffix">p</span>
+                    </span>
+                </div>
             </div>
         );
     }
