@@ -2,6 +2,8 @@ import Hapi from 'hapi';
 import fs from 'fs';
 import socketApp from './socketApp';
 
+require('./polyfills/Array.findIndex');
+
 const envVars = [
     'TECH_DOMAIN_ENDPOINT',
     'TECH_AUTH_ENDPOINT'
