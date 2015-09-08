@@ -43,17 +43,18 @@ export default class Home extends React.Component {
         const userAvatar = user && user.avatar ? user.avatar.large : 'http://gjesteurl';
         
         const buttonElements = buttons.map(({ clickHandler, title, key }) => {
-            return <button key={key} onClick={clickHandler} >{title}</button>;
+            return (
+                <li className="home-button-list-item" key={key}>
+                    <button className="btn home-button" onClick={clickHandler} >{title}</button>
+                </li>
+            );
         });
 		
 		return (
 			<section className="page-home">
-				<h1>Home</h1>
-				<p>Welcome, {userName}</p>
-                <img src={userAvatar} />
-				<div className="buttons">
-					{buttonElements}
-				</div>
+                <img className="avatar avatar-home" src={userAvatar} />
+                <p className="welcome">Welcome, {userName}</p>
+                <ul className="no-bullets home-button-list">{buttonElements}</ul>
 			</section>
 		);
 	}
