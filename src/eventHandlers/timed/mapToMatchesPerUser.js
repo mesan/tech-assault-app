@@ -1,5 +1,5 @@
 export default function mapToMatchesPerUser(match) {
-    const { board, nextTurn, score, actions, cards, users, cardsToLoot, cardsLooted, winner, turnTimedOut } = match;
+    const { board, nextTurn, score, actions, cards, users, cardsToLoot, cardsLooted, winner, turnTimedOut, highscores } = match;
     const [ player1PrimaryDeck, player2PrimaryDeck ] = match.primaryDecks;
     const [ user1, user2 ] = users;
 
@@ -11,8 +11,19 @@ export default function mapToMatchesPerUser(match) {
         };
     });
 
+
+    const playersHighscore = highscores.map((highscore) => {
+        return {
+            rank: highscore.rank,
+            score: highscore.score
+        };
+    });
+
     players[0].score = score[0];
     players[1].score = score[1];
+
+    players[0].highscore = playersHighscore[0];
+    players[1].highscore = playersHighscore[1];
 
     const flatActions = [];
 
