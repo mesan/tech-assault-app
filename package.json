@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/webpack --production",
     "test": "mocha",
-    "start": "babel-node server",
+    "start": "babel-node src/server",
     "dev": "./node_modules/.bin/webpack --w"
   },
   "author": "Arild Wanvik Tvergrov <arild.wanvik@gmail.com>",
