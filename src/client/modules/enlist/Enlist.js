@@ -1,17 +1,20 @@
 import React from 'react';
+import Spinner from '../common/Spinner';
 
 export default class Enlist extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		
-		this.props.onEnlist();
 	}
+
+    componentDidMount() {
+        this.props.onEnlist();
+    }
 	
 	render() {
 		return (
-			<img src="images/loading.gif" />
-		)
+			<Spinner text="Waiting for opponent..." />
+		);
 	}
 	
 }
