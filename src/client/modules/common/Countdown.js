@@ -3,7 +3,9 @@ import React from 'react';
 export default class Countdown extends React.Component {
 
     render() {
-        if (this.props.secondsLeft > 10 || this.props.secondsLeft === 0) {
+        const { secondsLeft } = this.props;
+
+        if (typeof secondsLeft === 'undefined' || secondsLeft > 10 || secondsLeft === 0) {
             return <span />;
         }
 
@@ -11,6 +13,5 @@ export default class Countdown extends React.Component {
             <div className="countdown">{this.props.secondsLeft}</div>
         );
     }
-
 
 }
