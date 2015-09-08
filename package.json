@@ -14,6 +14,7 @@
     "babel": "~5.2.15",
     "babel-core": "~5.2.17",
     "babel-loader": "~5.0.0",
+    "babel-runtime": "^5.8.20",
     "css-loader": "^0.15.6",
     "hapi": "~8.4.0",
     "hapi-auth-cookie": "~2.2.0",
