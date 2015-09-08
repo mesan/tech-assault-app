@@ -28,6 +28,7 @@ export default class Deck extends React.Component {
             <section className="page page-deck">
                 <h1>Your Deck</h1>
                 <p>Choose your primary deck (5 cards) by clicking on each individual card.</p>
+                <p><strong>{this.state.primaryDeck.length} cards selected</strong></p>
                 <button className="btn btn" onClick={this.handleBackClick.bind(this)}>Back</button>
 
                 <div className="deck">
