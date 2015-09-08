@@ -25,9 +25,16 @@ export default class Deck extends React.Component {
         const { deck, primaryDeck } = this.props.deck;
 
         return (
-            <section>
-                <button onClick={this.handleBackClick.bind(this)}>Back</button>
-                {deck.map(this.renderCard.bind(this))}
+            <section className="page page-deck">
+                <h1>Your Deck</h1>
+                <p>Choose your primary deck (5 cards) by clicking on each individual card.</p>
+                <button className="btn btn" onClick={this.handleBackClick.bind(this)}>Back</button>
+
+                <div className="deck">
+                    {deck.map(this.renderCard.bind(this))}
+                </div>
+
+                <button className="btn" onClick={this.handleBackClick.bind(this)}>Back</button>
             </section>
         );
     }
@@ -44,7 +51,12 @@ export default class Deck extends React.Component {
             ? 'card-primary'
             : undefined;
 
-        return <Card key={card.id} onSelect={this.selectCard.bind(this)} selected={false} card={card} className={className} />;
+        return <Card
+            key={card.id}
+            onSelect={this.selectCard.bind(this)}
+            selected={false}
+            card={card}
+            className={`card-in-grid ${className}`} />;
     }
 
     selectCard(cardId) {
