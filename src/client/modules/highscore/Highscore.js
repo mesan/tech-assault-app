@@ -21,8 +21,15 @@ export default class Highscore extends React.Component {
 			<section>
 				<h1>Highscores:</h1>
 				{highscores.map(this.renderScore.bind(this))}
+				<button onClick={this.handleBackClick.bind(this)}>Back</button>
 			</section>
 		);
+	}
+
+	handleBackClick(event) {
+		event.preventDefault();
+
+		this.props.onExitHighscore();
 	}
 
 	renderScore(playerScore) {

@@ -148,6 +148,10 @@ export default class App extends React.Component {
         this.changeCurrentPage('home');
     }
 
+    exitHighscore() {
+        this.changeCurrentPage('home');
+    }
+
     render() {
         const currentPage = this.props.modules[this.state.currentPageId];
         const { user } = this.state;
@@ -159,6 +163,7 @@ export default class App extends React.Component {
         const onRequestDeck = this.requestDeck.bind(this);
         const onUpdatePrimaryDeck = this.updatePrimaryDeck.bind(this);
         const onHighscores = this.highscores.bind(this);
+        const onExitHighscore = this.exitHighscore.bind(this);
 
         const pageProps = {
             user,
@@ -168,6 +173,7 @@ export default class App extends React.Component {
             onLoot,
             onExitLoot,
             onExitDeck,
+            onExitHighscore,
             onRequestDeck,
             gameController,
             changeCurrentPage: this.changeCurrentPage.bind(this),
