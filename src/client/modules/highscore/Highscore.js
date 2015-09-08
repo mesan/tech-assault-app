@@ -31,12 +31,36 @@ export default class Highscore extends React.Component {
 
 		const { playerName, rank, score } = playerScore;
 
+		let rankSuffix = this.findRankSuffix(rank);
+
 		return (
-			<div key={rank}>
+			<div className="highscore-item" key={rank}>
 				<img className="highscore-avatar" src={userAvatar} />
-				<div><span className="highscore-name">{playerName}</span></div>
-				<div><span className="highscore-rank">{rank}</span>st / <span className="highscore-score">{score}</span>p</div>
+				<h5>{playerName}</h5>
+				<p>
+					<span className="highscore-rank">{rank}</span>{rankSuffix} / <span className="highscore-score">{score}</span>p
+				</p>
 			</div>
 		);
+	}
+
+	findRankSuffix(rank) {
+		let rankSuffix;
+
+		switch(rank) {
+			case 1 :
+				rankSuffix = 'st';
+				break;
+			case 2 :
+				rankSuffix = 'nd';
+				break;
+			case 3 :
+				rankSuffix = 'rd';
+				break;
+			default :
+				rankSuffix = 'th';
+		}
+
+		return rankSuffix;
 	}
 }
