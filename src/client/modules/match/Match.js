@@ -10,7 +10,10 @@ export default class Match extends React.Component {
 		return (
 			<div>
                 <Countdown secondsLeft={this.props.secondsLeft} />
-                <MatchMeta players={this.props.match.players} user={this.props.user} />
+                <MatchMeta
+                    players={this.props.match.players}
+                    user={this.props.user}
+                    isPlayerTurn={this.props.match.isPlayerTurn} />
                 <MatchBoard
                     match={this.props.match}
                     gameController={this.props.gameController}

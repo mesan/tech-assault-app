@@ -40,6 +40,10 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
     let updateBoardCard = (id, pos, transition = false) => {
         let element = document.querySelector(`[id='${id}'`);
 
+        setTimeout(() => {
+            element.classList.remove('card-clicked');
+        }, 500);
+
         if (transition) {
             element.style.transitionDuration = "0.5s";
         }
@@ -58,11 +62,12 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
 
     let updateHandClickableState = (card, isPlayerTurn) => {
         card.classList.remove('card-clickable');
+        card.classList.remove('card-not-your-turn');
 
         if (isPlayerTurn) {
             card.classList.add('card-clickable');
         } else {
-            card.classList.remove('card-clickable');
+            card.classList.add('card-not-your-turn');
         }
     };
 
@@ -175,7 +180,16 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
 
         el.id = card.id;
 
-        el.addEventListener("click", cardEventListener);
+        el.addEventListener("click", (event) => {
+            const cardElements = document.querySelectorAll('.card-battle');
+
+            for (let cardElement of cardElements) {
+                cardElement.classList.remove('card-clicked');
+            }
+
+            el.classList.add('card-clicked');
+            cardEventListener(event);
+        });
 
         if (card.image) {
             let arrows = createElement("div", ["arrows"]);

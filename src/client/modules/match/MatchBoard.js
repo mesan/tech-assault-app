@@ -38,7 +38,9 @@ export default class Match extends React.Component {
     }
 
     submit(select) {
-        this.props.onPerformTurn(select.cardId, select.cardPosition);
+        if (this.props.match.isPlayerTurn) {
+            this.props.onPerformTurn(select.cardId, select.cardPosition);
+        }
     }
 
 
