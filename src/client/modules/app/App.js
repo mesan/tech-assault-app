@@ -178,9 +178,7 @@ export default class App extends React.Component {
 
         return (
             <div>
-                <h1>
-                    <a href="" onClick={this.goToHome.bind(this)}>TechAssault</a>
-                </h1>
+                <div className="app-banner"></div>
                 {React.createElement(currentPage, pageProps)}
             </div>
         );

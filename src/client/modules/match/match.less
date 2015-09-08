@@ -1,17 +1,9 @@
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  background-color: #D8D8D8;
-}
 
 .game {
   width: 100%;
-  height: 100%;
+  padding-top: 2.5%;
+  padding-bottom: 2.5%;
+  height: 75%;
 }
 
 .game-container {
@@ -31,7 +23,7 @@ html, body {
 
 .tile {
   float: left;
-  border: thin solid #D8D8D8;
+  border: thin solid #162e44;
   background-color: #FFFFFF;
   width: 25%;
   height: 25%;
@@ -135,6 +127,73 @@ html, body {
   background-color: red;
   color: white;
   font-weight: bold;
+}
+
+.match-meta {
+  background: #162e44;
+  height: 10%;
+}
+.match-meta::after {
+  clear: both;
+}
+
+.match-meta-players::after {
+  clear: both;
+}
+
+.match-meta-player {
+  width: 50%;
+  height: 100%;
+  padding: 5px;
+  display: inline-block;
+  position: relative;
+  color: #FACECE;
+  background-color: #B62A30;
+}
+
+.match-meta-player::after {
+  clear: both;
+}
+
+.match-meta-player-avatar {
+  display: inline-block;
+  border-radius: 50%;
+  max-width: 70px;
+  max-height: 70px;
+  position: absolute;
+  top: 50%;
+  //right: 0;
+  transform: translate(0%, -50%);
+  -webkit-transform: translate(0%, -50%);
+  -moz-transform: translate(0%, -50%);
+  -ms-transform: translate(0%, -50%);
+  border: 5px solid transparent;//darken(#FACECE, 20%);
+}
+
+.match-meta-player-name {
+  display: inline-block;
+  text-align: left;
+  position: absolute;
+  padding: 10px;
+  top: 50%;
+  left: 90px;
+  transform: translate(0%, -50%);
+  -webkit-transform: translate(0%, -50%);
+  -moz-transform: translate(0%, -50%);
+  -ms-transform: translate(0%, -50%);
+}
+
+.match-meta-player-opponent {
+  color: #ADCAE6;
+  background: #2B5D8B;
+
+  .match-meta-player-avatar {
+    border-color: transparent;//darken(#ADCAE6, 20%);
+  }
+
+  .match-meta-player-name {
+    text-align: right;
+  }
 }
 
 .animate-attack-top {
