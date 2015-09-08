@@ -29,11 +29,11 @@ export default class LootContent extends React.Component {
         const lootButtonDisabled = this.state.lootPerformed || typeof this.state.selectedCardId === 'undefined';
 
         const lootButton = this.isWinnerAndHasCardsToLoot()
-            ? <button onClick={this.handleLootClick.bind(this)} disabled={lootButtonDisabled}>Loot!</button>
+            ? <button className="btn" onClick={this.handleLootClick.bind(this)} disabled={lootButtonDisabled}>Loot!</button>
             : undefined;
 
         const backButton = this.isDrawOrLoserOrHasNoCardsToLoot()
-            ? <button onClick={this.handleBackClick.bind(this)}>Back</button>
+            ? <button className="btn" onClick={this.handleBackClick.bind(this)}>Back</button>
             : undefined;
 
         const title = winner === 'N/A'
@@ -52,10 +52,12 @@ export default class LootContent extends React.Component {
 
         return (
             <div>
-                <h2>{title}</h2>
+                <h1>{title}</h1>
                 {reason}
                 {text}
-                {cardsToLoot.map(this.renderCard.bind(this))}
+                <div className="cards-to-loot">
+                    {cardsToLoot.map(this.renderCard.bind(this))}
+                </div>
                 {lootButton}
                 {backButton}
             </div>

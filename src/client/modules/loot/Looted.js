@@ -19,13 +19,15 @@ export default class Looted extends React.Component {
         const reason = turnTimedOut ? <p>Reason: Timeout</p> : undefined;
 
         return (
-            <div>
-                <h2>{title}</h2>
+            <section className="page page-looted">
+                <h1>{title}</h1>
                 {reason}
-                {text}
-                {cardsLooted.map(this.renderCard.bind(this))}
-                <button onClick={this.handleBackClick.bind(this)}>Back</button>
-            </div>
+                <p>{text}</p>
+                <div className="cards-to-loot">
+                    {cardsLooted.map(this.renderCard.bind(this))}
+                </div>
+                <button className="btn" onClick={this.handleBackClick.bind(this)}>Back</button>
+            </section>
         );
     }
 

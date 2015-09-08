@@ -7,10 +7,10 @@ export default class Loot extends React.Component {
 
     render() {
         return (
-            <div>
+            <section className="page page-loot">
                 <Countdown secondsLeft={this.props.secondsLeft} />
                 <LootContent match={this.props.match} onExitLoot={this.props.onExitLoot} onLoot={this.props.onLoot} />
-            </div>
+            </section>
         );
     }
 }
