@@ -11,13 +11,12 @@ export default function mapToMatchesPerUser(match) {
         };
     });
 
-
-    const playersHighscore = highscores.map((highscore) => {
+    const playersHighscore = highscores ? highscores.map((highscore) => {
         return {
             rank: highscore.rank,
             score: highscore.score
         };
-    });
+    }) : [{ rank: 0, score: 0}, { rank: 0, score: 0}];
 
     players[0].score = score[0];
     players[1].score = score[1];
