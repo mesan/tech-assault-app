@@ -18,10 +18,10 @@ export default class Highscore extends React.Component {
 		}
 
 		return (
-			<section>
+			<section className="page page-highscore">
 				<h1>Highscores:</h1>
 				{highscores.map(this.renderScore.bind(this))}
-				<button onClick={this.handleBackClick.bind(this)}>Back</button>
+				<button className="btn" onClick={this.handleBackClick.bind(this)}>Back</button>
 			</section>
 		);
 	}
