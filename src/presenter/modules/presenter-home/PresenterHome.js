@@ -24,8 +24,10 @@ export default class PresenterHome extends React.Component {
 
         let rankSuffix = this.findRankSuffix(rank);
 
+        const className = index === 0 ? 'highscore-first' : '';
+
         return (
-            <div className="highscore-item" key={'' + rank + index}>
+            <div className={`highscore-item ${className}`} key={'' + rank + index}>
                 <img className="avatar highscore-avatar" src={userAvatar} />
                 <h5>{playerName}</h5>
                 <p>
