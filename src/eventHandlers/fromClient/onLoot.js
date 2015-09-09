@@ -33,6 +33,8 @@ export default function onLoot(loot) {
                 }
             }
 
+            socket.broadcast.emit(Events.highscoreUpdated);
+
             delete matchMap[matchId];
         })
         .catch(err => console.error('Could not perform loot', err, err.stack));

@@ -92,6 +92,8 @@ export default function onPerformTurn(turn) {
 
                 if ((typeof cardsToLoot !== 'undefined' && cardsToLoot.length === 0) ||
                     (typeof cardsLooted !== 'undefined' && cardsLooted.length > 0)) {
+
+                    socket.broadcast.emit(Events.highscoreUpdated);
                     delete matchMap[matchId];
                 }
             } else {

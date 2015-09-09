@@ -45,5 +45,7 @@ export default keyMirror({
 
     highscores: null, // A client requests the highscore list from the server
 
-    highscoresReceived: null // The server informs the client that the highscore list is ready to be processed.
+    highscoresReceived: null, // The server informs the client that the highscore list is ready to be processed.
+
+    highscoreUpdated: null // The server informs that the highscore has been updated.
 });

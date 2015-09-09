@@ -4,6 +4,7 @@
   "description": "The application endpoint of Tech Assault.",
   "scripts": {
     "postinstall": "./node_modules/.bin/webpack --production",
+    "build-presenter": "./node_modules/.bin/webpack --production --config webpack-presenter.config.js",
     "test": "mocha",
     "start": "babel-node src/server",
     "dev": "./node_modules/.bin/webpack --w"
