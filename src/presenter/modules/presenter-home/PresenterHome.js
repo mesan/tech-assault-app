@@ -5,15 +5,11 @@ export default class PresenterHome extends React.Component {
     render() {
         const { highscore } = this.props;
 
-        console.log(highscore);
-
         return (
             <section className="page page-presenter-home">
-                <h1 className="text-center">Want to Play?</h1>
-                <h2 className="visit">
-                    Visit: <a className="link" href="http://play.mesan.no">play.mesan.no</a>
-                </h2>
-                <h1 className="text-center highscore-header">Top 10 Highscore</h1>
+                <h1 className="text-center highscore-header">
+                    Want to Play? Visit: <a className="link" href="http://play.mesan.no">play.mesan.no</a>
+                </h1>
                 <ul className="highscore-list">
                     {highscore.map(this.renderHighscore.bind(this))}
                 </ul>
@@ -21,7 +17,7 @@ export default class PresenterHome extends React.Component {
         );
     }
 
-    renderHighscore(playerScore) {
+    renderHighscore(playerScore, index) {
         const userAvatar = playerScore.avatar ? playerScore.avatar.large : 'http://gjesteurl';
 
         const { playerName, rank, score } = playerScore;
@@ -29,7 +25,7 @@ export default class PresenterHome extends React.Component {
         let rankSuffix = this.findRankSuffix(rank);
 
         return (
-            <div className="highscore-item" key={rank}>
+            <div className="highscore-item" key={'' + rank + index}>
                 <img className="avatar highscore-avatar" src={userAvatar} />
                 <h5>{playerName}</h5>
                 <p>
