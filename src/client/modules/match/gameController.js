@@ -169,8 +169,14 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         return el;
     };
 
-    let createCard = (card, isPlayerTurn) => {
-        const cardClasses = ["card", "card-battle", card.isPlayerOwned ? "card-player" : "card-opponent"];
+    let createCard = (card, isPlayerTurn, cardOwnershipOverride = false) => {
+        const cardClasses = ["card", "card-battle"];
+
+        if (!cardOwnershipOverride) {
+            cardClasses.push(card.isPlayerOwned ? "card-player" : "card-opponent");
+        } else {
+            cardClasses.push(cardOwnershipOverride);
+        }
 
         if (isPlayerTurn) {
             cardClasses.push("card-clickable");
@@ -225,7 +231,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         const cardElement = document.querySelector(`[id='${card.id}']`);
         const cardsList = document.querySelector(`.cards`);
         cardsList.removeChild(cardElement);
-        const newCardElement = createCard(card);
+        const newCardElement = createCard(card, false, 'card-opponent');
 
         newCardElement.style.transitionDuration = "2s";
 
