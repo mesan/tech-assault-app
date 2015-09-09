@@ -21,8 +21,10 @@ export default function onTurnTimeout(sockets, timeLimit, nextTurn, matchInterva
 
                 if (socket) {
                     socket.emit(eventType, matchEvents[i]);
+                    socket.broadcast.emit(Events.highscoreUpdated);
                 }
             }
+
 
             if (eventType !== Events.lootPerformed && match.cardsToLoot.length > 0) {
                 const initialCountdown = 30;
