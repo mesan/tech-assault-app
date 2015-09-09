@@ -16,12 +16,19 @@ export default class PresenterApp extends React.Component {
         const { socket } = this.props;
 
         socket.on(Events.highscoreUpdated, (highscore) => {
+
             setTimeout(() => socket.emit(Events.highscores, this.props.userToken), 2000);
         });
 
         socket.on(Events.highscoresReceived, (highscore) => {
-            this.setState({ highscore: highscore, currentPageId: 'presenterHome' });
+            const currentPageId = this.state.currentPageId === 'presenterHome' ? 'presenterHome' : 'presenterScreens';
+            this.setState({ highscore, currentPageId });
         });
+
+        setInterval(() => {
+            const currentPageId = this.state.currentPageId === 'presenterHome' ? 'presenterScreens' : 'presenterHome';
+            this.setState({ currentPageId });
+        }, 10000);
 
         socket.emit(Events.highscores);
     }

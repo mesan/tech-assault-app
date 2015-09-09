@@ -6,13 +6,15 @@ import PresenterApp from './modules/presenter-app/PresenterApp';
 
 import PresenterHome from './modules/presenter-home/PresenterHome';
 import PresenterSplash from './modules/presenter-splash/PresenterSplash';
+import PresenterScreens from './modules/presenter-screens/PresenterScreens';
 
 require('babel/polyfill');
 require('./modules/presenter-app/presenter-app.less');
 
 const modules = {
     presenterHome: PresenterHome,
-    presenterSplash: PresenterSplash
+    presenterSplash: PresenterSplash,
+    presenterScreens: PresenterScreens
 };
 
 const socket = io();
