@@ -21,7 +21,7 @@ export default class Card extends React.Component {
         }
 
         return (
-            <div className={classes.join(' ')} onClick={this.handleClick.bind(this)} style={style}>
+            <a href="" className={classes.join(' ')} onClick={this.handleClick.bind(this)} style={style}>
                 <div className="attack">
                     <span>{card.attack}</span>
                 </div>
@@ -29,7 +29,7 @@ export default class Card extends React.Component {
                     <span>{card.defense}</span>
                 </div>
                 <div className={`arrows arrows-${parseInt(card.arrows.join(""), 2)}`}></div>
-            </div>
+            </a>
         );
     }
 
