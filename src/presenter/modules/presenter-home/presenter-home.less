@@ -1,4 +1,60 @@
 .page-presenter-home {
+  -webkit-animation: swapOut 5s ease-in-out;
+  animation: swapOut 5s ease-in-out;
+  opacity: 1;
+  transition: 1s opacity;
+}
+
+@-webkit-keyframes swapOut {
+  0% {
+    opacity: 0;
+    transform: scale(.8, .8);
+    -webkit-transform: translate(.8, .8);
+  }
+
+  10% {
+    opacity: 1;
+    transform: scale(1, 1);
+    -webkit-transform: translate(1, 1);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translate(0%, 0%);
+    -webkit-transform: translate(0%, 0%);
+  }
+
+  100% {
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0%);
+    opacity: 0;
+  }
+}
+
+@keyframes swapOut {
+  0% {
+    opacity: 0;
+    transform: scale(.8, .8);
+    -webkit-transform: translate(.8, .8);
+  }
+
+  10% {
+    opacity: 1;
+    transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+  }
+
+  80% {
+    opacity: 1;
+    transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+  }
+
+  100% {
+    transform: scale(1.5, 1.5);
+    -webkit-transform: scale(1.5, 1.5);
+    opacity: 0;
+  }
 }
 
 .visit {
@@ -21,6 +77,7 @@
   -webkit-animation: fadeInOut 2s ease-in-out 0s infinite;
   animation: fadeInOut 2s ease-in-out 0s infinite;
 }
+
 
 @-webkit-keyframes fadeInOut {
   0% {

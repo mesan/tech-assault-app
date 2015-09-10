@@ -7,10 +7,6 @@ export default class PresenterHome extends React.Component {
 
         return (
             <section className="page page-presenter-home">
-                <h1 className="text-center highscore-header">
-                    <span className="green">Want to Play?</span>
-                    &nbsp;Go to <a className="link" href="http://play.mesan.no">play.mesan.no</a>
-                </h1>
                 <ul className="highscore-list">
                     {highscore.map(this.renderHighscore.bind(this))}
                 </ul>

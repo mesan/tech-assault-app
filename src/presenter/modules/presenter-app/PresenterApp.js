@@ -28,7 +28,7 @@ export default class PresenterApp extends React.Component {
         setInterval(() => {
             const currentPageId = this.state.currentPageId === 'presenterHome' ? 'presenterScreens' : 'presenterHome';
             this.setState({ currentPageId });
-        }, 10000);
+        }, 5000);
 
         socket.emit(Events.highscores);
     }
@@ -48,6 +48,10 @@ export default class PresenterApp extends React.Component {
         return (
             <div>
                 <div className="app-banner"></div>
+                <h1 className="text-center highscore-header">
+                    <span className="green">Want to Play?</span>
+                    &nbsp;Go to <a className="link" href="http://play.mesan.no">play.mesan.no</a>
+                </h1>
                 {React.createElement(currentPage, pageProps)}
             </div>
         );
