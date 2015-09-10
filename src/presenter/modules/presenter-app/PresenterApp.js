@@ -28,7 +28,7 @@ export default class PresenterApp extends React.Component {
         setInterval(() => {
             const currentPageId = this.state.currentPageId === 'presenterHome' ? 'presenterScreens' : 'presenterHome';
             this.setState({ currentPageId });
-        }, 5000);
+        }, 10000);
 
         socket.emit(Events.highscores);
     }
