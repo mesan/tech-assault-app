@@ -67,9 +67,17 @@ server.route({
 
 server.route({
     method: 'GET',
-    path: '/login',
+    path: '/login/twitter',
     handler: function (request, reply) {
         return reply.redirect(`${TECH_AUTH_ENDPOINT}/login/twitter`);
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/login/facebook',
+    handler: function (request, reply) {
+        return reply.redirect(`${TECH_AUTH_ENDPOINT}/login/facebook`);
     }
 });
 
