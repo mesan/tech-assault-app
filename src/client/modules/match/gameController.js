@@ -38,7 +38,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
     };
 
     let updateBoardCard = (id, pos, transition = false) => {
-        let element = document.querySelector(`[id='${id}']`);
+        let element = document.querySelector(`[id='${id}'`);
 
         setTimeout(() => {
             element.classList.remove('card-clicked');
@@ -73,7 +73,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
 
     let updateHandCard = (id, hand, isPlayerTurn, isBottomHand = false) => {
         let i = hand.findIndex(c => c && c.id === id);
-        let card = document.querySelector(`[id='${id}']`);
+        let card = document.querySelector(`[id='${id}'`);
         const margin = 10;
 
         const cardWidth = board.offsetWidth / 5 - (margin * 4 / 5);
@@ -99,7 +99,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         }
 
         playerCards.forEach(c => {
-            const cardElement = document.querySelector(`[id='${c.id}']`);
+            const cardElement = document.querySelector(`[id='${c.id}'`);
             updateHandClickableState(cardElement, isPlayerTurn);
         });
     };
@@ -139,7 +139,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
     };
 
     let setCardOwner = (id, owner, transition) => {
-        let card = document.querySelector(`[id='${id}]'`);
+        let card = document.querySelector(`[id='${id}'`);
 
         if (transition) {
             card.style.transitionDuration = "0.5s";
@@ -155,7 +155,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
         let directions = [["topLeft", "top", "topRight",],
             ["left", null, "right",],
             ["bottomLeft", "bottom", "bottomRight"]];
-        let card = document.querySelector(`[id='${id}']`);
+        let card = document.querySelector(`[id='${id}'`);
 
         let direction = directions[1 + Math.floor(opposingCardPosition/4) - Math.floor(cardPosition/boardSize)][Math.abs((cardPosition%boardSize) - (opposingCardPosition%boardSize) - 1)];
 
@@ -228,7 +228,7 @@ var renderController = function ({ tileEventListener, cardEventListener }) {
     };
 
     let turnCard = card => {
-        const cardElement = document.querySelector(`[id='${card.id}']`);
+        const cardElement = document.querySelector(`[id='${card.id}'`);
         const cardsList = document.querySelector(`.cards`);
         cardsList.removeChild(cardElement);
         const newCardElement = createCard(card, false, 'card-opponent');
