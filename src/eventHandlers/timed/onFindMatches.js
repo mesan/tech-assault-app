@@ -1,5 +1,6 @@
 import requestMatches from '../../util/requests/requestMatches';
 import requestPostEnlistment from '../../util/requests/requestPostEnlistment';
+import requestUserByToken from '../../util/requests/requestUserByToken';
 import Events from '../../constants/Events';
 
 import initializeMatch from './initializeMatch';
@@ -30,7 +31,8 @@ export default function onFindMatches() {
                     console.error(`Could not find socket with token ${userToken1}`);
 
                     if (typeof socket2 !== 'undefined') {
-                        requestPostEnlistment(socket2.token);
+                        requestUserByToken(socket2.token)
+                            .then((user) => requestPostEnlistment(user.id, socket2.token));
                     }
 
                     continue;
@@ -39,7 +41,8 @@ export default function onFindMatches() {
                 if (typeof socket2 === 'undefined') {
                     console.error(`Could not find socket with token ${userToken2}`);
 
-                    requestPostEnlistment(socket1.token);
+                    requestUserByToken(socket1.token)
+                        .then((user) => requestPostEnlistment(user.id, socket1.token));
 
                     continue;
                 }
