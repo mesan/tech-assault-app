@@ -2,3 +2,4 @@ node_modules
 public/index.js
 ssl
 tech-assault-client/.idea
+dist
