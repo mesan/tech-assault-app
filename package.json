@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "The application endpoint of Tech Assault.",
   "scripts": {
-    "postinstall": "./node_modules/.bin/webpack --production",
+    "postinstall": "./node_modules/.bin/webpack --production && ./node_modules/.bin/babel src -d dist",
     "build-presenter": "./node_modules/.bin/webpack --production --config webpack-presenter.config.js",
     "test": "mocha",
     "start": "babel-node src/server",
