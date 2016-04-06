@@ -59,7 +59,7 @@ server.route({
     path: '/{param*}',
     handler: {
         directory: {
-            path: 'public',
+            path: __dirname + '/../public',
             listing: false
         }
     }
